@@ -1,5 +1,13 @@
 {
   "github": {
     "enabled": true
-  }
+  },
+  "build": {
+    "env": {
+      "HUGO_VERSION": "0.147.7"
+    }
+  },
+  "buildCommand": "hugo --gc --minify",
+  "outputDirectory": "public",
+  "installCommand": "git submodule update --init --recursive"
 }
