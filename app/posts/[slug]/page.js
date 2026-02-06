@@ -81,10 +81,10 @@ export default async function Post({ params }) {
   const nextPost = currentIndex < allPosts.length - 1 ? allPosts[currentIndex + 1] : null
   
   return (
-    <div className="container mx-auto px-4 py-8 max-w-3xl">
+    <div className="container mx-auto px-4 py-8 max-w-[var(--w)]">
       <article className="prose-standard text-post-text leading-article" style={{ fontSize: '1.125rem' }}>
         <header className="mb-14">
-          <h1 className="my-0! pb-2.5 text-heading-text">{post.title}</h1>
+          <h1 className="my-0! pb-2.5 text-heading-text text-2xl font-semibold">{post.title}</h1>
           
           <div className="text-xs antialiased opacity-60 mt-2">
             {post.date && (
@@ -125,7 +125,7 @@ export default async function Post({ params }) {
       
       {/* 文章导航 */}
       {(prevPost || nextPost) && (
-        <nav className="mt-24 flex overflow-hidden rounded-xl bg-black/[3%] text-lg leading-[1.2]! *:flex *:w-1/2 *:items-center *:p-5 *:font-medium *:no-underline dark:bg-white/[8%] [&>*:hover]:bg-black/[2%] dark:[&>*:hover]:bg-white/[3%]">
+        <nav className="mt-24! flex overflow-hidden rounded-xl bg-black/[3%] text-lg leading-[1.2]! *:flex *:w-1/2 *:items-center *:p-5 *:font-medium *:no-underline dark:bg-white/[8%] [&>*:hover]:bg-black/[2%] dark:[&>*:hover]:bg-white/[3%]">
           {prevPost && (
             <a className="ltr:pr-3 rtl:pl-3 text-heading-text" href={`/posts/${prevPost.id}`}>
               <span className="ltr:mr-1.5 rtl:ml-1.5">←</span>

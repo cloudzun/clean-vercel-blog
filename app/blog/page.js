@@ -46,36 +46,32 @@ export default async function BlogPage() {
   const posts = await getPosts()
   
   return (
-    <div className="container mx-auto px-4 py-8 max-w-3xl">
-      <h1 className="text-3xl font-bold mb-6 text-heading-text">Blog Posts</h1>
-      
+    <div className="container mx-auto px-4 py-8 max-w-[var(--w)]">
       {posts.length === 0 ? (
         <p className="text-post-text">No blog posts available yet.</p>
       ) : (
-        <div className="space-y-8">
+        <div>
           {posts.map((post) => (
-            <article key={post.id} className="border-b border-gray-200 pb-8 mb-8">
-              <h2 className="text-xl font-semibold mb-2">
+            <section key={post.id} className="blog-post-item relative my-10 first-of-type:mt-0 last-of-type:mb-0">
+              <h2 className="blog-post-title my-0! text-xl font-semibold text-heading-text">
                 <a 
                   href={`/posts/${post.id}`} 
-                  className="text-heading-text hover:underline no-underline"
+                  className="hover:underline no-underline text-heading-text"
                 >
                   {post.title}
                 </a>
               </h2>
-              
-              {post.date && (
-                <div className="text-xs antialiased opacity-60 mb-3">
-                  <time>
-                    {new Date(post.date).toLocaleDateString('zh-CN', { 
-                      year: 'numeric', 
-                      month: 'long', 
-                      day: 'numeric' 
-                    })}
-                  </time>
-                </div>
-              )}
-            </article>
+              <time className="blog-post-date text-xs antialiased opacity-60">
+                {new Date(post.date).toLocaleDateString('zh-CN', { 
+                  year: 'numeric', 
+                  month: 'long', 
+                  day: 'numeric' 
+                })}
+              </time>
+              <a className="absolute inset-0 text-[0px] no-underline" href={`/posts/${post.id}`}>
+                {post.title}
+              </a>
+            </section>
           ))}
         </div>
       )}
