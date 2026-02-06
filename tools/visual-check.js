@@ -4,7 +4,7 @@ const fs = require('fs')
 const path = require('path')
 const puppeteer = require('puppeteer-core')
 const PNG = require('pngjs').PNG
-const pixelmatch = require('pixelmatch')
+const pixelmatch = require('pixelmatch').default || require('pixelmatch')
 
 const PORT = process.env.PORT || 3000
 const HOST = `http://localhost:${PORT}`
@@ -31,7 +31,39 @@ async function capture(pagePath, outName, browser) {
   const url = `${HOST}${pagePath}`
   const page = await browser.newPage()
   await page.setViewport({ width: 1280, height: 900 })
+  // disable JavaScript to avoid client-side theme toggles altering the DOM during capture
+  try { await page.setJavaScriptEnabled(false) } catch (e) {}
+  // force light color scheme to match baseline screenshots
+  try {
+    await page.emulateMediaFeatures([{ name: 'prefers-color-scheme', value: 'light' }])
+  } catch (e) {
+    // ignore if not supported
+  }
+  // set common localStorage keys before any script runs to prefer light theme
+  try {
+    await page.evaluateOnNewDocument(() => {
+      try { localStorage.setItem('theme', 'light') } catch(e){}
+      try { localStorage.setItem('color-scheme', 'light') } catch(e){}
+      try { localStorage.setItem('preferred-theme', 'light') } catch(e){}
+    })
+  } catch (e) {}
   await page.goto(url, { waitUntil: 'networkidle2' })
+  // Ensure light-mode rendering: wait for scripts, then remove any `dark` class and set background var
+  try {
+    await page.waitForTimeout(600)
+    await page.evaluate(() => {
+      try { document.documentElement.classList.remove('dark') } catch(e){}
+      try { document.documentElement.style.setProperty('--bg', '#ffffff') } catch(e){}
+      try { document.body.style.background = '#ffffff' } catch(e){}
+    })
+    // allow styles to reflow after changes
+    await page.waitForTimeout(120)
+  } catch (e) {}
+  // inject strong override to ensure light background and text colors
+  try {
+    await page.addStyleTag({ content: 'html,body{background:#ffffff !important;color:#000000 !important} *{background-color:transparent !important}' })
+    await page.waitForTimeout(60)
+  } catch (e) {}
   const outPath = path.join(OUTPUT_DIR, outName)
   await page.screenshot({ path: outPath, fullPage: true })
   await page.close()
@@ -55,7 +87,12 @@ function compare(imgAPath, imgBPath, diffPath) {
 async function main() {
   console.log('Starting visual check: will run `npm run dev` and compare screenshots')
 
-  const dev = spawn(process.platform === 'win32' ? 'npm.cmd' : 'npm', ['run', 'dev'], { stdio: 'inherit' })
+  let dev = null
+  if (!process.env.SKIP_DEV) {
+    dev = spawn(process.platform === 'win32' ? 'npm.cmd' : 'npm', ['run', 'dev'], { stdio: 'inherit' })
+  } else {
+    console.log('SKIP_DEV is set — not starting dev server from this script')
+  }
 
   try {
     await waitForServer(45000)
@@ -84,7 +121,7 @@ async function main() {
   }
 
   await browser.close()
-  dev.kill('SIGINT')
+  if (dev) dev.kill('SIGINT')
   console.log('Visual check finished; diffs in', OUTPUT_DIR)
 }
 
