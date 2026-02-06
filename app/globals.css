@@ -22,8 +22,8 @@
   }
   
   article {
-    font-size: 1.0625rem;
-    line-height: 1.75;
+    font-size: 1.125rem;
+    line-height: 1.8;
     color: #364153; /* Hugo Paper主题的文章文本颜色 */
   }
   
@@ -46,26 +46,24 @@
 @layer components {
   /* Tailwind-first test class for article body migration */
   .article-tailwind {
-    @apply text-base text-[#364153];
-    font-size: 1.0625rem;
-    line-height: 1.75;
+    @apply text-base leading-8 text-[#364153];
   }
 
   /* Typography mappings for article-tailwind */
   .article-tailwind h1 {
-    @apply text-3xl font-semibold mt-0 mb-6 text-[#101828];
+    @apply text-3xl font-semibold mt-0 mb-4 text-[#101828];
   }
 
   .article-tailwind h2 {
-    @apply text-2xl font-semibold mt-8 mb-5 text-[#101828];
+    @apply text-2xl font-semibold mt-8 mb-3 text-[#101828];
   }
 
   .article-tailwind h3 {
-    @apply text-xl font-semibold mt-6 mb-3 text-[#101828];
+    @apply text-xl font-semibold mt-6 mb-2 text-[#101828];
   }
 
   .article-tailwind p {
-    @apply mb-5;
+    @apply mb-4;
   }
 
   .article-tailwind ul,
