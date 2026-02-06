@@ -1065,7 +1065,7 @@ button:not(#\#):not(#\#), input:where([type="button"], [type="reset"], [type="su
   background: url(./theme.png) left center/ auto 1.5rem no-repeat;
 }
 .\[background\:url\(\.\/theme\.svg\)_left_center\/cover_no-repeat\]:not(#\#):not(#\#):not(#\#):not(#\#) {
-  background: url(./theme.svg) left center/cover no-repeat;
+  background: url('/theme.svg') left center/cover no-repeat;
 }
 .\[background\:var\(--url\)_center_center\/cover_no-repeat\]:not(#\#):not(#\#):not(#\#):not(#\#) {
   background: var(--url) center center/cover no-repeat;

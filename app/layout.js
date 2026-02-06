@@ -38,7 +38,7 @@ function Header() {
           我的博客
         </a>
         <div
-          className="btn-dark text-[0px] ltr:ml-4 rtl:mr-4 h-6 w-6 shrink-0 cursor-pointer [background:url(./theme.svg)_left_center/cover_no-repeat] dark:invert"
+          className="btn-dark text-[0px] ltr:ml-4 rtl:mr-4 h-6 w-6 shrink-0 cursor-pointer [background:url('/theme.svg')_left_center/cover_no-repeat] dark:invert"
           role="button"
           aria-label="Dark"
         ></div>

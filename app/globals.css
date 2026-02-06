@@ -1,13 +1,14 @@
+/* Import Hugo Paper compiled CSS to better match site styles */
+@import url('/hugo-paper-main.css');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-/* Import Hugo Paper compiled CSS to better match site styles */
-@import url('/hugo-paper-main.css');
-
 @layer base {
   :root {
     --background: #faf8f1; /* Hugo Paper主题的默认背景色 */
+    --bg: var(--background);
     --foreground: #101828;
     --w: calc(680px + 32px * 2); /* Hugo Paper主题的容器宽度 */
   }
