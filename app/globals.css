@@ -88,9 +88,11 @@
   }
 
   .article-tailwind pre {
-    @apply bg-black/[6%] p-4 rounded-md overflow-auto my-4 font-mono text-sm;
+    @apply p-4 rounded-md overflow-auto my-4 font-mono text-sm;
+    background-color: #f7f7f6;
     code {
       @apply text-sm leading-[1.6] break-words;
+      background-color: #f3f4f6;
     }
     /* Improve scroll & padding for long code blocks */
     max-width: 100%;
@@ -141,11 +143,11 @@
   }
   
   .article-header {
-    @apply mb-10;
+    @apply mb-14;
   }
   
   .article-title {
-    @apply my-0! text-3xl font-semibold leading-tight; /* tune title size/leading to match baseline */
+    @apply my-0! pb-2.5 text-2xl font-semibold; /* restore closer to Hugo baseline */
   }
   
   .article-date {
@@ -157,6 +159,7 @@
     background-color: rgba(16,24,40,0.03);
     transition: background-color .12s ease;
   }
+  .post-tag:hover { background-color: rgba(16,24,40,0.06) }
   
   .blog-post-item {
     @apply relative my-10 first-of-type:mt-0 last-of-type:mb-0;
