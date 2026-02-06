@@ -68,7 +68,15 @@
 
   .article-tailwind ul,
   .article-tailwind ol {
-    @apply pl-6 mb-4 list-disc;
+    @apply pl-6 mb-4;
+  }
+
+  .article-tailwind ul {
+    @apply list-disc;
+  }
+
+  .article-tailwind ol {
+    @apply list-decimal;
   }
 
   .article-tailwind blockquote {
@@ -77,14 +85,39 @@
 
   .article-tailwind pre {
     @apply bg-black/[6%] p-4 rounded-md overflow-auto my-4 font-mono text-sm;
+    code {
+      @apply text-sm leading-[1.6] break-words;
+    }
+    /* Improve scroll & padding for long code blocks */
+    max-width: 100%;
+  }
   }
 
   .article-tailwind code {
     @apply bg-black/[4%] px-1 py-0.5 rounded text-sm font-mono;
+    /* inline code slight color tweak */
+    color: inherit;
   }
 
   .article-tailwind img {
     @apply max-w-full h-auto rounded-md my-4;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .article-tailwind figure {
+    @apply my-6;
+  }
+
+  .article-tailwind figcaption {
+    @apply text-sm opacity-70 mt-2 text-center italic;
+  }
+
+  /* List marker color and spacing tweaks to better match Hugo theme */
+  .article-tailwind li::marker {
+    color: #6b7280; /* gray-500 */
+    font-size: 0.9em;
   }
 
   .prose-standard {
