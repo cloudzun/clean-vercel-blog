@@ -86,22 +86,24 @@ https://discord.com/api/oauth2/authorize?client_id=YOUR_CLIENT_ID&permissions=27
 ```json
 {
   "channels": {
-    "discord": {
-      "enabled": true,
-      "token": "YOUR_BOT_TOKEN_HERE",
-      "groupPolicy": "allowlist",
-      "guilds": {
-        "YOUR_GUILD_ID_HERE": {
-          "requireMention": false,
-          "channels": {
-            "YOUR_CHANNEL_ID_HERE": {
-              "allow": true,
-              "requireMention": false
-            }
-          }
+```
+"discord": {
+  "enabled": true,
+  "token": "YOUR_BOT_TOKEN_HERE",
+  "groupPolicy": "allowlist",
+  "guilds": {
+    "YOUR_GUILD_ID_HERE": {
+      "requireMention": false,
+      "channels": {
+        "YOUR_CHANNEL_ID_HERE": {
+          "allow": true,
+          "requireMention": false
         }
       }
     }
+  }
+}
+```
   }
 }
 ```
@@ -177,12 +179,16 @@ message action=channel-list channel=discord guildId=YOUR_GUILD_ID
 ```json
 "channels": {
   "YOUR_EXISTING_CHANNEL_ID": {
-    "allow": true,
-    "requireMention": false
+```
+"allow": true,
+"requireMention": false
+```
   },
   "YOUR_NEW_CHANNEL_ID": {
-    "allow": true,
-    "requireMention": false
+```
+"allow": true,
+"requireMention": false
+```
   }
 }
 ```

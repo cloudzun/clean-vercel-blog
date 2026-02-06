@@ -66,22 +66,26 @@ systemctl --user start hugo-blog.service
 
 # Check if hugo server is running on port 1313
 if ! lsof -Pi :1313 -sTCP:LISTEN -t >/dev/null 2>&1; then
-    echo "$(date): Hugo server is not running, attempting to restart..."
-    
-    # Try to start the service via systemctl
-    systemctl --user start hugo-blog.service
-    
-    # Wait a moment for the service to start
-    sleep 5
-    
-    # Check if it started successfully
-    if lsof -Pi :1313 -sTCP:LISTEN -t >/dev/null 2>&1; then
-        echo "$(date): Hugo server restarted successfully"
-    else
-        echo "$(date): Failed to restart Hugo server"
-    fi
+```
+echo "$(date): Hugo server is not running, attempting to restart..."
+
+# Try to start the service via systemctl
+systemctl --user start hugo-blog.service
+
+# Wait a moment for the service to start
+sleep 5
+
+# Check if it started successfully
+if lsof -Pi :1313 -sTCP:LISTEN -t >/dev/null 2>&1; then
+    echo "$(date): Hugo server restarted successfully"
 else
-    echo "$(date): Hugo server is running normally"
+    echo "$(date): Failed to restart Hugo server"
+fi
+```
+else
+```
+echo "$(date): Hugo server is running normally"
+```
 fi
 ```
 

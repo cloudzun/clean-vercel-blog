@@ -25,22 +25,24 @@ categories: ["技术指南", "权限管理"]
 ```json
 {
   "channels": {
-    "discord": {
-      "enabled": true,
-      "token": "YOUR_BOT_TOKEN",
-      "groupPolicy": "allowlist",
-      "guilds": {
-        "YOUR_GUILD_ID": {
-          "requireMention": false,
-          "users": ["USER_ID_1", "USER_ID_2"],  // 指定允许的用户ID
-          "channels": {
-            "CHANNEL_ID_1": {
-              "requireMention": false
-            }
-          }
+```
+"discord": {
+  "enabled": true,
+  "token": "YOUR_BOT_TOKEN",
+  "groupPolicy": "allowlist",
+  "guilds": {
+    "YOUR_GUILD_ID": {
+      "requireMention": false,
+      "users": ["USER_ID_1", "USER_ID_2"],  // 指定允许的用户ID
+      "channels": {
+        "CHANNEL_ID_1": {
+          "requireMention": false
         }
       }
     }
+  }
+}
+```
   }
 }
 ```

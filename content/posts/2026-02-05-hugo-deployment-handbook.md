@@ -77,17 +77,23 @@ theme = 'hugo-paper'
   mainSections = ["posts"]
 
 [[menu.main]]
-    name = "首页"
-    url = "/"
-    weight = 1
+```
+name = "首页"
+url = "/"
+weight = 1
+```
 [[menu.main]]
-    name = "文章"
-    url = "/posts/"
-    weight = 2
+```
+name = "文章"
+url = "/posts/"
+weight = 2
+```
 [[menu.main]]
-    name = "关于"
-    url = "/about/"
-    weight = 3
+```
+name = "关于"
+url = "/about/"
+weight = 3
+```
 ```
 
 ## 三、Nginx Proxy Manager发布
@@ -193,9 +199,11 @@ hugo server --bind 0.0.0.0 --baseURL https://yourdomain.com --appendPort=false -
 ```bash
 #!/bin/bash
 if ! pgrep -f "hugo server" > /dev/null; then
-    cd /home/user/myblog
-    hugo server --bind 0.0.0.0 --baseURL https://yourdomain.com --appendPort=false --port 1313 &
-    echo "$(date): Hugo restarted" >> /var/log/hugo-monitor.log
+```
+cd /home/user/myblog
+hugo server --bind 0.0.0.0 --baseURL https://yourdomain.com --appendPort=false --port 1313 &
+echo "$(date): Hugo restarted" >> /var/log/hugo-monitor.log
+```
 fi
 ```
 
