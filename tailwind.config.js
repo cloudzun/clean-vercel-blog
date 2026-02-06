@@ -9,9 +9,11 @@ module.exports = {
       colors: {
         'post-text': '#364153', // Hugo Paper主题的文章文本颜色
         'heading-text': '#101828', // Hugo Paper主题的标题颜色
+        background: 'var(--background)',
+        foreground: 'var(--foreground)',
       },
       maxWidth: {
-        ' prose-standard': '65ch', // Hugo Paper主题的文章最大宽度
+        'prose-standard': '65ch', // Hugo Paper主题的文章最大宽度
       },
       lineHeight: {
         'article': '1.8', // Hugo Paper主题的文章行高

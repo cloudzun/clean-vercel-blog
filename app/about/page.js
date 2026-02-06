@@ -1,28 +1,20 @@
-// app/about/page.js
-import Link from 'next/link';
-
-export default function About() {
+export default function AboutPage() {
   return (
-    <div className="container mx-auto px-5 max-w-2xl py-10">
-      <h1 className="text-3xl font-bold mb-5">关于这个博客</h1>
-      
-      <div>
-        <p className="mb-3">欢迎来到我的技术博客！</p>
+    <div className="container mx-auto px-4 py-8 max-w-3xl">
+      <article className="prose-standard text-post-text leading-article" style={{ fontSize: '1.125rem' }}>
+        <header className="article-header">
+          <h1 className="article-title text-heading-text">关于</h1>
+        </header>
         
-        <p className="mb-3">这里分享我在技术领域的学习心得、实践经验以及思考总结。</p>
-        
-        <h2 className="text-xl font-semibold mt-5 mb-3">主要涉及领域：</h2>
-        <ul className="list-disc pl-5">
-          <li>Web开发</li>
-          <li>AI与机器学习</li>
-          <li>DevOps与云原生</li>
-          <li>开源项目实践</li>
-        </ul>
-        
-        <div className="mt-8">
-          <Link href="/" className="text-blue-600 hover:underline">← 返回首页</Link>
-        </div>
-      </div>
+        <section className="prose prose-neutral dark:prose-invert max-w-none">
+          <p>欢迎来到我的个人博客。</p>
+          
+          <p>在这里，我会分享各种技术心得、生活感悟以及一些有趣的想法。</p>
+          
+          <h2>联系我</h2>
+          <p>如果您有任何问题或建议，欢迎通过邮件或社交媒体与我联系。</p>
+        </section>
+      </article>
     </div>
-  );
+  )
 }

@@ -3,6 +3,11 @@
 @tailwind utilities;
 
 @layer base {
+  :root {
+    --background: #ffffff;
+    --foreground: #101828;
+  }
+  
   article {
     font-size: 1.125rem;
     line-height: 1.8;
@@ -32,5 +37,9 @@
   
   .article-date {
     @apply text-xs antialiased opacity-60 mt-2;
+  }
+  
+  .post-tag {
+    @apply mb-1.5 rounded-lg bg-black/[3%] px-5 py-1 no-underline hover:bg-black/[6%] ltr:mr-1.5 rtl:ml-1.5 dark:bg-white/[8%] dark:hover:bg-white/[12%];
   }
 }

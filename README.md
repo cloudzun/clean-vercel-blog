@@ -1,31 +1,32 @@
-# New Vercel Blog
+# 我的博客
 
-A simple, efficient blog built with Next.js and deployed on Vercel.
+一个简洁、高效的博客，使用 Next.js 构建并部署在 Vercel 上。
 
-## Features
+## 特性
 
-- Next.js 14 with App Router
-- Markdown-based content management
-- Responsive design with Tailwind CSS
-- Static generation for optimal performance
+- Next.js 14 与 App Router
+- 基于 Markdown 的内容管理
+- 响应式设计，使用 Tailwind CSS
+- 静态生成以获得最佳性能
+- 与 Hugo Paper 主题一致的设计风格
 
-## Structure
+## 目录结构
 
-- `app/` - Next.js 14 App Router pages
-- `content/posts/` - Markdown blog posts
-- `components/` - React components
-- `lib/` - Utility functions
+- `app/` - Next.js 14 App Router 页面
+- `content/posts/` - Markdown 博客文章
+- `components/` - React 组件
+- `lib/` - 工具函数
 
-## Getting Started
+## 快速开始
 
-First, run the development server:
+启动开发服务器：
 
 ```bash
 npm run dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+在浏览器中打开 [http://localhost:3000](http://localhost:3000) 查看效果。
 
-## Deployment
+## 部署
 
-This project is designed to be deployed to Vercel. Simply connect your GitHub repository to Vercel and it will automatically build and deploy.
+该项目设计用于部署到 Vercel。只需将 GitHub 仓库连接到 Vercel，它将自动构建和部署。
