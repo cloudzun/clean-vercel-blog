@@ -49,6 +49,44 @@
     @apply text-base leading-8 text-[#364153];
   }
 
+  /* Typography mappings for article-tailwind */
+  .article-tailwind h1 {
+    @apply text-3xl font-semibold mt-0 mb-4 text-[#101828];
+  }
+
+  .article-tailwind h2 {
+    @apply text-2xl font-semibold mt-8 mb-3 text-[#101828];
+  }
+
+  .article-tailwind h3 {
+    @apply text-xl font-semibold mt-6 mb-2 text-[#101828];
+  }
+
+  .article-tailwind p {
+    @apply mb-4;
+  }
+
+  .article-tailwind ul,
+  .article-tailwind ol {
+    @apply pl-6 mb-4 list-disc;
+  }
+
+  .article-tailwind blockquote {
+    @apply pl-4 border-l-4 border-black/10 italic text-black/70 my-4;
+  }
+
+  .article-tailwind pre {
+    @apply bg-black/[6%] p-4 rounded-md overflow-auto my-4 font-mono text-sm;
+  }
+
+  .article-tailwind code {
+    @apply bg-black/[4%] px-1 py-0.5 rounded text-sm font-mono;
+  }
+
+  .article-tailwind img {
+    @apply max-w-full h-auto rounded-md my-4;
+  }
+
   .prose-standard {
     max-width: 65ch; /* Hugo Paper主题的标准宽度 */
   }
