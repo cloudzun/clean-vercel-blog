@@ -192,4 +192,22 @@
   .nav-wrapper {
     @apply fixed inset-x-0 top-full z-40 flex h-full flex-col justify-center bg-[--background] pb-16 duration-200 select-none lg:static lg:h-auto lg:flex-row lg:bg-transparent! lg:pb-0 lg:transition-none;
   }
+
+  /* Header & nav refinements to match Hugo spacing */
+  header a.text-2xl {
+    @apply text-2xl font-medium leading-none;
+  }
+
+  .nav-wrapper nav a {
+    @apply text-heading-text lg:text-base lg:font-normal;
+    text-decoration-thickness: 1px;
+  }
+
+  .nav-wrapper nav a:hover {
+    text-decoration: underline;
+  }
+
+  footer {
+    @apply py-2 text-center text-xs opacity-60;
+  }
 }
