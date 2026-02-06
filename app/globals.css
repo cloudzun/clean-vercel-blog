@@ -4,13 +4,17 @@
 
 @layer base {
   :root {
-    --background: #ffffff;
+    --background: #faf8f1; /* Hugo Paper主题的默认背景色 */
     --foreground: #101828;
     --w: calc(680px + 32px * 2); /* Hugo Paper主题的容器宽度 */
   }
   
+  html {
+    @apply not-ready lg:text-base;
+  }
+  
   body {
-    @apply dark:bg-black/85;
+    @apply bg-[--background] text-black antialiased duration-200 ease-out [-webkit-tap-highlight-color:transparent] dark:text-white dark:bg-black/85;
   }
   
   article {
@@ -22,12 +26,16 @@
   h1,
   h2,
   h3 {
-    font-weight: 600;
+    @apply font-semibold;
     color: #101828; /* Hugo Paper主题的标题颜色 */
   }
   
   pre {
     direction: ltr;
+  }
+  
+  .not-ready * {
+    @apply transition-none!;
   }
 }
 
@@ -41,7 +49,7 @@
   }
   
   .article-title {
-    @apply my-0! pb-2.5 text-3xl md:text-4xl font-semibold;
+    @apply my-0! pb-2.5 text-2xl font-semibold; /* Hugo Paper主题的文章标题大小 */
   }
   
   .article-date {
@@ -70,5 +78,17 @@
   
   .dark-bg-fix {
     @apply dark:before:fixed dark:before:inset-0 dark:before:z-[-1] dark:before:bg-black/85;
+  }
+  
+  .btn-dark {
+    @apply text-[0px] h-6 w-6 shrink-0 cursor-pointer [background:url(./theme.svg)_left_center/cover_no-repeat] dark:invert;
+  }
+  
+  .btn-menu {
+    @apply relative z-50 flex h-[4.5rem] w-[5rem] shrink-0 cursor-pointer flex-col items-center justify-center gap-2.5 ltr:-mr-8 rtl:-ml-8;
+  }
+  
+  .nav-wrapper {
+    @apply fixed inset-x-0 top-full z-40 flex h-full flex-col justify-center bg-[--background] pb-16 duration-200 select-none lg:static lg:h-auto lg:flex-row lg:bg-transparent! lg:pb-0 lg:transition-none;
   }
 }
