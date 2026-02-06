@@ -78,17 +78,20 @@ export default async function Post({ params }) {
   const allPosts = await getAllPosts()
   
   // 找到当前文章在排序后的列表中的索引
+  // 列表是按日期降序排列的（最新的在前），所以：
+  // - prevPost 是更新的文章（索引更小）
+  // - nextPost 是更旧的文章（索引更大）
   const currentIndex = allPosts.findIndex(p => p.id === params.slug)
-  const prevPost = currentIndex > 0 ? allPosts[currentIndex - 1] : null
-  const nextPost = currentIndex < allPosts.length - 1 ? allPosts[currentIndex + 1] : null
+  const newerPost = currentIndex > 0 ? allPosts[currentIndex - 1] : null
+  const olderPost = currentIndex < allPosts.length - 1 ? allPosts[currentIndex + 1] : null
   
   return (
-    <div className="container mx-auto px-4 py-8 max-w-[var(--w)]">
-      <article className="prose-standard text-post-text leading-article" style={{ fontSize: '1.125rem' }}>
-        <header className="mb-14">
-          <h1 className="my-0! pb-2.5 text-heading-text text-2xl font-semibold">{post.title}</h1>
+    <div className="mx-auto px-8 pt-14 pb-16 max-w-[var(--w)]">
+      <article className="prose">
+        <header className="not-prose article-header">
+          <h1 className="article-title text-heading-text">{post.title}</h1>
           
-          <div className="text-xs antialiased opacity-60 mt-2">
+          <div className="article-date mt-2">
             {post.date && (
               <time>
                 {new Date(post.date).toLocaleDateString('zh-CN', { 
@@ -105,20 +108,19 @@ export default async function Post({ params }) {
         
         {/* 文章内容 */}
         <section 
-          className="prose prose-neutral dark:prose-invert max-w-none"
           dangerouslySetInnerHTML={{ __html: post.contentHtml }} 
         />
         
         {/* 文章标签 */}
         {post.tags && post.tags.length > 0 && (
-          <footer className="mt-12 flex flex-wrap">
+          <footer className="not-prose mt-12 flex flex-wrap">
             {post.tags.map((tag, index) => (
               <a 
                 key={index}
-                className="post-tag text-heading-text no-underline"
+                className="post-tag text-heading-text"
                 href={`/tags/${tag}`}
               >
-                {tag}
+                #{tag}
               </a>
             ))}
           </footer>
@@ -126,20 +128,20 @@ export default async function Post({ params }) {
       </article>
       
       {/* 文章导航 */}
-      {(prevPost || nextPost) && (
+      {(olderPost || newerPost) && (
         <nav className="mt-24! flex overflow-hidden rounded-xl bg-black/[3%] text-lg leading-[1.2]! *:flex *:w-1/2 *:items-center *:p-5 *:font-medium *:no-underline dark:bg-white/[8%] [&>*:hover]:bg-black/[2%] dark:[&>*:hover]:bg-white/[3%]">
-          {prevPost && (
-            <a className="ltr:pr-3 rtl:pl-3 text-heading-text" href={`/posts/${prevPost.id}`}>
+          {olderPost && (
+            <a className="ltr:pr-3 rtl:pl-3 text-heading-text" href={`/posts/${olderPost.id}`}>
               <span className="ltr:mr-1.5 rtl:ml-1.5">←</span>
-              <span>{prevPost.title}</span>
+              <span>{olderPost.title}</span>
             </a>
           )}
-          {nextPost && (
+          {newerPost && (
             <a 
               className="justify-end pl-3 ltr:ml-auto rtl:mr-auto text-heading-text" 
-              href={`/posts/${nextPost.id}`}
+              href={`/posts/${newerPost.id}`}
             >
-              <span>{nextPost.title}</span>
+              <span>{newerPost.title}</span>
               <span className="ltr:ml-1.5 rtl:mr-1.5">→</span>
             </a>
           )}
