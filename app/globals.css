@@ -2,6 +2,9 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Import Hugo Paper compiled CSS to better match site styles */
+@import url('/hugo-paper-main.css');
+
 @layer base {
   :root {
     --background: #faf8f1; /* Hugo Paper主题的默认背景色 */
