@@ -1,6 +1,9 @@
 /* Import Hugo Paper compiled CSS to better match site styles */
 @import url('/hugo-paper-main.css');
 
+/* Import highlight.js theme for syntax highlighting */
+@import url('https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/default.min.css');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -19,6 +22,18 @@
   
   body {
     @apply bg-[--background] text-black antialiased duration-200 ease-out [-webkit-tap-highlight-color:transparent] dark:text-white dark:bg-black/85;
+  }
+
+  /* Stabilize rendering for visual tests: disable animations/transitions and enforce font smoothing */
+  *, *::before, *::after {
+    @apply transition-none!;
+    animation: none !important;
+  }
+
+  html, body {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
   }
   
   article {
@@ -51,7 +66,7 @@
 
   /* Typography mappings for article-tailwind */
   .article-tailwind h1 {
-    @apply text-3xl font-semibold mt-0 mb-4 text-[#101828];
+    @apply text-4xl font-semibold mt-0 mb-6 text-[#101828];
   }
 
   .article-tailwind h2 {
@@ -104,6 +119,47 @@
     color: inherit;
   }
 
+  /* Syntax highlighting overrides for article-tailwind */
+  .article-tailwind pre code.hljs {
+    @apply bg-transparent p-0;
+    color: #333;
+  }
+
+  .article-tailwind pre {
+    @apply relative;
+  }
+
+  /* Ensure syntax highlighted code blocks work well with our theme */
+  .article-tailwind .hljs {
+    background: #f7f7f6 !important;
+    color: #333 !important;
+    border-radius: 6px;
+  }
+
+  .article-tailwind .hljs-comment,
+  .article-tailwind .hljs-quote {
+    color: #69787f !important;
+    font-style: italic;
+  }
+
+  .article-tailwind .hljs-keyword,
+  .article-tailwind .hljs-selector-tag,
+  .article-tailwind .hljs-subst {
+    color: #d14 !important;
+    font-weight: bold;
+  }
+
+  .article-tailwind .hljs-string,
+  .article-tailwind .hljs-attr {
+    color: #0e7b6c !important;
+  }
+
+  .article-tailwind .hljs-number,
+  .article-tailwind .hljs-literal,
+  .article-tailwind .hljs-meta {
+    color: #088 !important;
+  }
+
   .article-tailwind img {
     @apply max-w-full h-auto rounded-md my-4;
     display: block;
@@ -140,6 +196,7 @@
     max-width: var(--w); /* Hugo Paper主题的标准宽度 */
     margin-left: auto;
     margin-right: auto;
+    @apply px-4;
   }
   
   .article-header {
@@ -147,19 +204,19 @@
   }
   
   .article-title {
-    @apply my-0! pb-2.5 text-2xl font-semibold; /* restore closer to Hugo baseline */
+    @apply my-0! pb-3 text-3xl font-semibold; /* restore closer to Hugo baseline */
   }
   
   .article-date {
-    @apply text-xs antialiased opacity-70;
+    @apply text-xs antialiased text-[#6b7280];
   }
   
   .post-tag {
     @apply mb-1.5 rounded-md px-3 py-0.5 no-underline ltr:mr-1.5 rtl:ml-1.5;
-    background-color: rgba(16,24,40,0.03);
+    background-color: #f3f4f6;
     transition: background-color .12s ease;
   }
-  .post-tag:hover { background-color: rgba(16,24,40,0.06) }
+  .post-tag:hover { background-color: #e6e7ea }
   
   .blog-post-item {
     @apply relative my-10 first-of-type:mt-0 last-of-type:mb-0;

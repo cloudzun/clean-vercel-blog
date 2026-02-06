@@ -16,6 +16,7 @@
     "postcss": "^8.4.31",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "rehype-highlight": "^7.0.2",
     "rehype-stringify": "^9.0.3",
     "remark": "^14.0.2",
     "remark-html": "^15.0.2",
