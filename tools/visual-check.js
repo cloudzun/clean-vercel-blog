@@ -30,6 +30,10 @@ function waitForServer(timeout = 30000) {
 async function capture(pagePath, outName, browser) {
   const url = `${HOST}${pagePath}`
   const page = await browser.newPage()
+  // Optionally disable JavaScript for deterministic captures
+  if (process.env.DISABLE_JS) {
+    try { await page.setJavaScriptEnabled(false) } catch (e) {}
+  }
   await page.setViewport({ width: 1280, height: 900 })
   // inject pre-document script to prefer light theme before client scripts run
   try {

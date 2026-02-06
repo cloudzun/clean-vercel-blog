@@ -1,7 +1,6 @@
 import './globals.css'
 import { Inter } from 'next/font/google'
 import ThemeToggle from './lib/theme-toggle'
-import Script from 'next/script'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -12,21 +11,17 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="zh-CN" className="not-ready lg:text-base" style={{'--bg': '#faf8f1'}}>
+    <html lang="zh-CN" className="not-ready lg:text-base" style={{'--bg': '#ffffff'}}>
       <head>
-        <meta name="theme-color" content="#faf8f1" />
+        <meta name="theme-color" content="#ffffff" />
       </head>
-      <body className={`${inter.className} bg-[--bg] text-black antialiased duration-200 ease-out [-webkit-tap-highlight-color:transparent] dark:text-white`}>
+      <body className={`${inter.className} bg-white text-gray-900 antialiased`}>
         <ThemeToggle />
         <Header />
-        <main className="article-tailwind prose prose-neutral dark:prose-invert relative mx-auto min-h-[calc(100vh-9rem)] max-w-[var(--w)] px-8 pt-14 pb-16">
+        <main className="relative min-h-[calc(100vh-9rem)]">
           {children}
         </main>
         <Footer />
-        <Script src="/highlight.min.js" strategy="afterInteractive" />
-        <Script id="hljs-init" strategy="afterInteractive">
-          {`hljs && hljs.highlightAll && hljs.highlightAll()`}
-        </Script>
       </body>
     </html>
   )
@@ -56,7 +51,7 @@ function Header() {
       ></div>
 
       <div
-        className="nav-wrapper fixed inset-x-0 top-full z-40 flex h-full flex-col justify-center bg-[--bg] pb-16 duration-200 select-none lg:static lg:h-auto lg:flex-row lg:bg-transparent! lg:pb-0 lg:transition-none"
+        className="nav-wrapper fixed inset-x-0 top-full z-40 flex h-full flex-col justify-center bg-white pb-16 duration-200 select-none lg:static lg:h-auto lg:flex-row lg:bg-transparent lg:pb-0 lg:transition-none"
       >
         <nav
           className="lg:ml-12 lg:flex lg:flex-row lg:items-center lg:space-x-10 rtl:space-x-reverse"

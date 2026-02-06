@@ -1,0 +1,183 @@
+/* Import Hugo Paper compiled CSS to better match site styles */
+@import url('/hugo-paper-main.css');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: #faf8f1; /* Hugo Paper主题的默认背景色 */
+    --bg: var(--background);
+    --foreground: #101828;
+    --w: calc(680px + 32px * 2); /* Hugo Paper主题的容器宽度 */
+  }
+  
+  html {
+    @apply not-ready lg:text-base;
+  }
+  
+  body {
+    @apply bg-[--background] text-black antialiased duration-200 ease-out [-webkit-tap-highlight-color:transparent] dark:text-white dark:bg-black/85;
+  }
+
+  /* Enhanced font rendering for better readability */
+  html, body {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+  }
+  
+  pre {
+    direction: ltr;
+  }
+  
+  .not-ready * {
+    @apply transition-none!;
+  }
+}
+
+@layer components {
+  /* GitHub-style code blocks matching Hugo Paper */
+  .prose pre {
+    color: rgb(229, 231, 235) !important;
+    background-color: rgb(30, 41, 57) !important;
+    overflow-x: auto;
+    font-weight: 400;
+    font-size: 0.875em;
+    line-height: 1.7142857;
+    margin-top: 1.7142857em;
+    margin-bottom: 1.7142857em;
+    border-radius: 0.375rem;
+    padding: 0.8571429em 1.1428571em;
+  }
+
+  .prose pre code {
+    background-color: transparent !important;
+    border-width: 0 !important;
+    border-radius: 0 !important;
+    padding: 0 !important;
+    font-weight: inherit !important;
+    color: inherit !important;
+    font-size: inherit !important;
+    font-family: inherit !important;
+    line-height: inherit !important;
+  }
+
+  .prose code {
+    color: rgb(16, 24, 40);
+    font-weight: 600;
+    font-size: 0.875em;
+  }
+
+  .prose code::before,
+  .prose code::after {
+    content: "`";
+  }
+
+  .prose pre code::before,
+  .prose pre code::after {
+    content: none;
+  }
+
+  /* GitHub-inspired syntax highlighting colors for dark background */
+  .prose .hljs {
+    display: block;
+    overflow-x: auto;
+    padding: 0;
+    background: transparent !important;
+    color: rgb(229, 231, 235) !important;
+  }
+
+  .prose .hljs-comment,
+  .prose .hljs-quote {
+    color: #8b949e !important;
+    font-style: italic;
+  }
+
+  .prose .hljs-keyword,
+  .prose .hljs-selector-tag {
+    color: #ff7b72 !important;
+  }
+
+  .prose .hljs-string,
+  .prose .hljs-attr {
+    color: #a5d6ff !important;
+  }
+
+  .prose .hljs-number,
+  .prose .hljs-literal,
+  .prose .hljs-meta {
+    color: #79c0ff !important;
+  }
+
+  .prose .hljs-function,
+  .prose .hljs-title {
+    color: #d2a8ff !important;
+  }
+
+  .prose .hljs-variable,
+  .prose .hljs-name {
+    color: #ffa657 !important;
+  }
+
+  .prose .hljs-built_in,
+  .prose .hljs-builtin-name {
+    color: #ffa657 !important;
+  }
+
+  .article-header {
+    @apply mb-14;
+  }
+  
+  .article-title {
+    @apply my-0! pb-2.5 text-2xl font-semibold;
+  }
+  
+  .article-date {
+    @apply text-xs antialiased text-[#6b7280];
+  }
+  
+  .post-tag {
+    @apply mb-1.5 rounded-md px-3 py-0.5 no-underline ltr:mr-1.5 rtl:ml-1.5;
+    background-color: #f3f4f6;
+    transition: background-color .12s ease;
+  }
+  .post-tag:hover { 
+    background-color: #e6e7ea;
+  }
+  
+  .blog-post-item {
+    @apply relative my-10 first-of-type:mt-0 last-of-type:mb-0;
+  }
+  
+  .blog-post-title {
+    @apply my-0!;
+  }
+  
+  .blog-post-date {
+    @apply text-xs antialiased opacity-60;
+  }
+  
+  .pagination-btn {
+    @apply rounded-xl bg-black px-5 py-3 text-[0.95em] text-white no-underline duration-100 active:scale-95 dark:bg-white dark:text-black;
+    box-shadow: 0 1px 0 rgba(16,24,40,0.03);
+  }
+  
+  .dark-bg-fix {
+    @apply dark:before:fixed dark:before:inset-0 dark:before:z-[-1] dark:before:bg-black/85;
+  }
+  
+  .btn-dark {
+    @apply text-[0px] h-6 w-6 shrink-0 cursor-pointer [background:url('/theme.svg')_center/cover_no-repeat] dark:invert rounded-full;
+  }
+  
+  .btn-menu {
+    @apply relative z-50 flex h-[4.5rem] w-[5rem] shrink-0 cursor-pointer flex-col items-center justify-center gap-2.5 ltr:-mr-6 rtl:-ml-6;
+    transition: transform .12s ease;
+  }
+  
+  .nav-wrapper {
+    @apply fixed inset-x-0 top-full z-40 flex h-full flex-col justify-center bg-[--background] pb-16 duration-200 select-none lg:static lg:h:auto lg:flex-row lg:bg-transparent! lg:pb-0 lg:transition-none;
+  }
+}

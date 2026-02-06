@@ -4,7 +4,7 @@ import matter from 'gray-matter'
 import { unified } from 'unified'
 import remarkParse from 'remark-parse'
 import remarkRehype from 'remark-rehype'
-import rehypeHighlight from 'rehype-highlight'
+import rehypePrism from 'rehype-prism-plus'
 import rehypeStringify from 'rehype-stringify'
 
 async function getPost(id) {
@@ -18,7 +18,7 @@ async function getPost(id) {
   const processedContent = await unified()
     .use(remarkParse)
     .use(remarkRehype)
-    .use(rehypeHighlight)
+    .use(rehypePrism, { ignoreMissing: true })
     .use(rehypeStringify)
     .process(content)
   
@@ -86,14 +86,14 @@ export default async function Post({ params }) {
   const olderPost = currentIndex < allPosts.length - 1 ? allPosts[currentIndex + 1] : null
   
   return (
-    <div className="mx-auto px-8 pt-14 pb-16 max-w-[var(--w)]">
-      <article className="prose">
+    <div className="container-narrow py-12">
+      <article className="prose prose-lg mx-auto">
         <header className="not-prose article-header">
-          <h1 className="article-title text-heading-text">{post.title}</h1>
+          <h1 className="article-title">{post.title}</h1>
           
-          <div className="article-date mt-2">
+          <div className="article-meta">
             {post.date && (
-              <time>
+              <time className="text-gray-600">
                 {new Date(post.date).toLocaleDateString('zh-CN', { 
                   year: 'numeric', 
                   month: 'long', 
@@ -101,7 +101,7 @@ export default async function Post({ params }) {
                 })}
               </time>
             )}
-            {post.author && post.date && <span className="mx-1">&middot;</span>}
+            {post.author && post.date && <span>·</span>}
             {post.author && <span>{post.author}</span>}
           </div>
         </header>
@@ -113,36 +113,38 @@ export default async function Post({ params }) {
         
         {/* 文章标签 */}
         {post.tags && post.tags.length > 0 && (
-          <footer className="not-prose mt-12 flex flex-wrap">
-            {post.tags.map((tag, index) => (
-              <a 
-                key={index}
-                className="post-tag text-heading-text"
-                href={`/tags/${tag}`}
-              >
-                #{tag}
-              </a>
-            ))}
+          <footer className="not-prose mt-12">
+            <div className="flex flex-wrap gap-2">
+              {post.tags.map((tag, index) => (
+                <a 
+                  key={index}
+                  className="post-tag"
+                  href={`/tags/${tag}`}
+                >
+                  #{tag}
+                </a>
+              ))}
+            </div>
           </footer>
         )}
       </article>
       
       {/* 文章导航 */}
       {(olderPost || newerPost) && (
-        <nav className="mt-24! flex overflow-hidden rounded-xl bg-black/[3%] text-lg leading-[1.2]! *:flex *:w-1/2 *:items-center *:p-5 *:font-medium *:no-underline dark:bg-white/[8%] [&>*:hover]:bg-black/[2%] dark:[&>*:hover]:bg-white/[3%]">
+        <nav className="post-nav not-prose">
           {olderPost && (
-            <a className="ltr:pr-3 rtl:pl-3 text-heading-text" href={`/posts/${olderPost.id}`}>
-              <span className="ltr:mr-1.5 rtl:ml-1.5">←</span>
-              <span>{olderPost.title}</span>
+            <a className="post-nav-item" href={`/posts/${olderPost.id}`}>
+              <div className="post-nav-label">← 上一篇</div>
+              <div className="post-nav-title">{olderPost.title}</div>
             </a>
           )}
           {newerPost && (
             <a 
-              className="justify-end pl-3 ltr:ml-auto rtl:mr-auto text-heading-text" 
+              className={`post-nav-item text-right ${!olderPost ? 'md:col-start-2' : ''}`}
               href={`/posts/${newerPost.id}`}
             >
-              <span>{newerPost.title}</span>
-              <span className="ltr:ml-1.5 rtl:mr-1.5">→</span>
+              <div className="post-nav-label">下一篇 →</div>
+              <div className="post-nav-title">{newerPost.title}</div>
             </a>
           )}
         </nav>
