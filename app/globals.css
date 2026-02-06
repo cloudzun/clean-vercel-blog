@@ -1,3 +1,36 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer base {
+  article {
+    font-size: 1.125rem;
+    line-height: 1.8;
+    color: #364153; /* Hugo Paper主题的文章文本颜色 */
+  }
+  
+  h1,
+  h2,
+  h3 {
+    font-weight: 600;
+    color: #101828; /* Hugo Paper主题的标题颜色 */
+  }
+}
+
+@layer components {
+  .prose-standard {
+    max-width: 65ch; /* Hugo Paper主题的标准宽度 */
+  }
+  
+  .article-header {
+    @apply mb-14;
+  }
+  
+  .article-title {
+    @apply my-0 pb-2.5 text-3xl md:text-4xl font-semibold;
+  }
+  
+  .article-date {
+    @apply text-xs antialiased opacity-60 mt-2;
+  }
+}
