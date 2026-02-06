@@ -51,24 +51,24 @@
 
   /* Typography mappings for article-tailwind */
   .article-tailwind h1 {
-    @apply text-3xl font-semibold mt-0 mb-4 text-[#101828];
+    @apply text-3xl font-semibold mt-0 mb-6 text-[#101828];
   }
 
   .article-tailwind h2 {
-    @apply text-2xl font-semibold mt-8 mb-3 text-[#101828];
+    @apply text-2xl font-semibold mt-8 mb-5 text-[#101828];
   }
 
   .article-tailwind h3 {
-    @apply text-xl font-semibold mt-6 mb-2 text-[#101828];
+    @apply text-xl font-semibold mt-6 mb-3 text-[#101828];
   }
 
   .article-tailwind p {
-    @apply mb-4;
+    @apply mb-5;
   }
 
   .article-tailwind ul,
   .article-tailwind ol {
-    @apply pl-6 mb-4;
+    @apply pl-5 mb-4;
   }
 
   .article-tailwind ul {
@@ -77,6 +77,10 @@
 
   .article-tailwind ol {
     @apply list-decimal;
+  }
+
+  .article-tailwind li {
+    @apply mb-2;
   }
 
   .article-tailwind blockquote {
