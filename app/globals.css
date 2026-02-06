@@ -95,8 +95,7 @@
     /* Improve scroll & padding for long code blocks */
     max-width: 100%;
   }
-  }
-
+ 
   .article-tailwind code {
     @apply bg-black/[4%] px-1 py-0.5 rounded text-sm font-mono;
     /* inline code slight color tweak */
