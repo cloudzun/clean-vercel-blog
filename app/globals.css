@@ -141,19 +141,21 @@
   }
   
   .article-header {
-    @apply mb-14;
+    @apply mb-10;
   }
   
   .article-title {
-    @apply my-0! pb-2.5 text-2xl font-semibold; /* Hugo Paper主题的文章标题大小 */
+    @apply my-0! text-3xl font-semibold leading-tight; /* tune title size/leading to match baseline */
   }
   
   .article-date {
-    @apply text-xs antialiased opacity-60;
+    @apply text-xs antialiased opacity-70;
   }
   
   .post-tag {
-    @apply mb-1.5 rounded-lg bg-black/[3%] px-5 py-1 no-underline hover:bg-black/[6%] ltr:mr-1.5 rtl:ml-1.5 dark:bg-white/[8%] dark:hover:bg-white/[12%];
+    @apply mb-1.5 rounded-md px-3 py-0.5 no-underline ltr:mr-1.5 rtl:ml-1.5;
+    background-color: rgba(16,24,40,0.03);
+    transition: background-color .12s ease;
   }
   
   .blog-post-item {
