@@ -22,8 +22,8 @@
   }
   
   article {
-    font-size: 1.125rem;
-    line-height: 1.8;
+    font-size: 1.0625rem;
+    line-height: 1.75;
     color: #364153; /* Hugo Paper主题的文章文本颜色 */
   }
   
@@ -46,7 +46,9 @@
 @layer components {
   /* Tailwind-first test class for article body migration */
   .article-tailwind {
-    @apply text-base leading-8 text-[#364153];
+    @apply text-base text-[#364153];
+    font-size: 1.0625rem;
+    line-height: 1.75;
   }
 
   /* Typography mappings for article-tailwind */
@@ -129,8 +131,16 @@
     font-size: 0.9em;
   }
 
+  .article-tailwind a {
+    color: #1155cc;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+
   .prose-standard {
-    max-width: 65ch; /* Hugo Paper主题的标准宽度 */
+    max-width: var(--w); /* Hugo Paper主题的标准宽度 */
+    margin-left: auto;
+    margin-right: auto;
   }
   
   .article-header {
