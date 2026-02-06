@@ -44,6 +44,11 @@
 }
 
 @layer components {
+  /* Tailwind-first test class for article body migration */
+  .article-tailwind {
+    @apply text-base leading-8 text-[#364153];
+  }
+
   .prose-standard {
     max-width: 65ch; /* Hugo Paper主题的标准宽度 */
   }

@@ -1,6 +1,7 @@
 import './globals.css'
 import { Inter } from 'next/font/google'
 import ThemeToggle from './lib/theme-toggle'
+import Script from 'next/script'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -18,10 +19,14 @@ export default function RootLayout({ children }) {
       <body className={`${inter.className} bg-[--bg] text-black antialiased duration-200 ease-out [-webkit-tap-highlight-color:transparent] dark:text-white`}>
         <ThemeToggle />
         <Header />
-        <main className="prose prose-neutral dark:prose-invert relative mx-auto min-h-[calc(100vh-9rem)] max-w-[var(--w)] px-8 pt-14 pb-16">
+        <main className="article-tailwind prose prose-neutral dark:prose-invert relative mx-auto min-h-[calc(100vh-9rem)] max-w-[var(--w)] px-8 pt-14 pb-16">
           {children}
         </main>
         <Footer />
+        <Script src="/highlight.min.js" strategy="afterInteractive" />
+        <Script id="hljs-init" strategy="afterInteractive">
+          {`hljs && hljs.highlightAll && hljs.highlightAll()`}
+        </Script>
       </body>
     </html>
   )
