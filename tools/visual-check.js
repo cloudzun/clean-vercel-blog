@@ -31,22 +31,25 @@ async function capture(pagePath, outName, browser) {
   const url = `${HOST}${pagePath}`
   const page = await browser.newPage()
   await page.setViewport({ width: 1280, height: 900 })
-  // disable JavaScript to avoid client-side theme toggles altering the DOM during capture
-  try { await page.setJavaScriptEnabled(false) } catch (e) {}
+  // inject pre-document script to prefer light theme before client scripts run
+  try {
+    await page.evaluateOnNewDocument(() => {
+      try { localStorage.setItem('theme', 'light') } catch(e){}
+      try { localStorage.setItem('color-scheme', 'light') } catch(e){}
+      try { localStorage.setItem('preferred-theme', 'light') } catch(e){}
+      try { document.documentElement.classList.remove('dark') } catch(e){}
+      // insert a small style to bias towards light background early
+      const s = document.createElement('style')
+      s.textContent = 'html,body{background:#ffffff !important;color:#000000 !important} *{background-color:transparent !important}'
+      document.head && document.head.appendChild(s)
+    })
+  } catch (e) {}
   // force light color scheme to match baseline screenshots
   try {
     await page.emulateMediaFeatures([{ name: 'prefers-color-scheme', value: 'light' }])
   } catch (e) {
     // ignore if not supported
   }
-  // set common localStorage keys before any script runs to prefer light theme
-  try {
-    await page.evaluateOnNewDocument(() => {
-      try { localStorage.setItem('theme', 'light') } catch(e){}
-      try { localStorage.setItem('color-scheme', 'light') } catch(e){}
-      try { localStorage.setItem('preferred-theme', 'light') } catch(e){}
-    })
-  } catch (e) {}
   await page.goto(url, { waitUntil: 'networkidle2' })
   // Ensure light-mode rendering: wait for scripts, then remove any `dark` class and set background var
   try {
@@ -59,11 +62,8 @@ async function capture(pagePath, outName, browser) {
     // allow styles to reflow after changes
     await page.waitForTimeout(120)
   } catch (e) {}
-  // inject strong override to ensure light background and text colors
-  try {
-    await page.addStyleTag({ content: 'html,body{background:#ffffff !important;color:#000000 !important} *{background-color:transparent !important}' })
-    await page.waitForTimeout(60)
-  } catch (e) {}
+  // ensure final reflow
+  try { await page.waitForTimeout(60) } catch(e) {}
   const outPath = path.join(OUTPUT_DIR, outName)
   await page.screenshot({ path: outPath, fullPage: true })
   await page.close()
@@ -98,7 +98,7 @@ async function main() {
     await waitForServer(45000)
   } catch (e) {
     console.error('Dev server did not start:', e.message)
-    dev.kill('SIGINT')
+    if (dev) dev.kill('SIGINT')
     process.exit(1)
   }
 
