@@ -14,4 +14,8 @@ coverage/
 *.lcov
 .nyc_output/
 .vercel
-.vercelignore
+
+# Hugo build outputs
+public/
+resources/
+.hugo_build.lock

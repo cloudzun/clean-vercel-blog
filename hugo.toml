@@ -1,0 +1,129 @@
+# =====================================================================================
+# Hugo Configuration with FixIt Theme
+# =====================================================================================
+
+# -------------------------------------------------------------------------------------
+# Site Configuration
+# -------------------------------------------------------------------------------------
+title = "My Hugo Blog"
+baseURL = "http://localhost:1313/"
+theme = "FixIt"
+languageCode = "zh-cn"
+defaultContentLanguage = "zh-cn"
+
+# Build settings
+enableRobotsTXT = true
+enableEmoji = true
+
+# -------------------------------------------------------------------------------------
+# Markup Configuration
+# -------------------------------------------------------------------------------------
+[markup]
+  [markup.highlight]
+    lineNos = true
+    noClasses = false
+    style = "monokai"
+  [markup.goldmark]
+    [markup.goldmark.renderer]
+      unsafe = true
+
+# -------------------------------------------------------------------------------------
+# Menu Configuration
+# -------------------------------------------------------------------------------------
+[menu]
+  [[menu.main]]
+    identifier = "home"
+    name = "首页"
+    url = "/"
+    weight = 1
+  [[menu.main]]
+    identifier = "posts"
+    name = "文章"
+    url = "/posts/"
+    weight = 2
+  [[menu.main]]
+    identifier = "about"
+    name = "关于"
+    url = "/about/"
+    weight = 3
+
+# -------------------------------------------------------------------------------------
+# Outputs Configuration
+# -------------------------------------------------------------------------------------
+[outputs]
+  home = ["HTML", "RSS", "JSON"]
+
+# -------------------------------------------------------------------------------------
+# Taxonomies Configuration
+# -------------------------------------------------------------------------------------
+[taxonomies]
+  category = "categories"
+  tag = "tags"
+
+# -------------------------------------------------------------------------------------
+# FixIt Theme Configuration
+# -------------------------------------------------------------------------------------
+[params]
+  # FixIt theme version
+  version = "0.3.X"
+  
+  # Site default theme ("light", "dark", "auto")
+  defaultTheme = "auto"
+  
+  # Public git repo url only then enableGitInfo is true
+  gitRepo = ""
+  
+  # Header config
+  [params.header]
+    # Desktop header mode ("fixed", "normal", "auto")
+    desktopMode = "fixed"
+    # Mobile header mode ("fixed", "normal", "auto")
+    mobileMode = "auto"
+    
+  # Footer config
+  [params.footer]
+    enable = true
+    # Custom content (HTML format is supported)
+    custom = ""
+    # Whether to show Hugo and theme info
+    hugo = false
+    # Whether to show copyright info
+    copyright = true
+    # Whether to show the author
+    author = true
+    # Site creation time
+    since = 2026
+    
+  # Home page config
+  [params.home]
+    # Home page profile
+    [params.home.profile]
+      enable = true
+      # Social links
+      social = true
+    # Home page posts
+    [params.home.posts]
+      enable = true
+      # Special amount of posts in each home posts page
+      paginate = 10
+      
+  # Page config
+  [params.page]
+    # Whether to enable the author's avatar
+    authorAvatar = true
+    # Whether to show the last update time
+    lastMod = true
+    # Whether to show the reading time
+    readingTime = true
+    # Whether to show the word count
+    wordCount = true
+    # Table of contents config
+    [params.page.toc]
+      enable = true
+      auto = true
+    
+  # Social config
+  [params.social]
+    GitHub = ""
+    Twitter = ""
+    Email = ""
