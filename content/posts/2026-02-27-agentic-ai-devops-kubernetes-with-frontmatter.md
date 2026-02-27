@@ -1,6 +1,6 @@
 ---
 title: "Agentic AI 重塑 DevOps 与 Kubernetes 基础设施：技术变革与未来展望"
-date: 2026-02-27T09:30:00+08:00
+date: 2026-02-27T01:00:00+08:00
 draft: false
 tags: ["Agentic AI", "DevOps", "Kubernetes", "Cloud Native", "AI Infrastructure", "Automation"]
 categories: ["AI", "DevOps", "Cloud Computing"]
