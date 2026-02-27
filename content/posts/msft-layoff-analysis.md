@@ -4,6 +4,7 @@ date: 2026-02-27T15:17:00+08:00
 draft: false
 tags: ["Microsoft", "MSFT", "Layoff", "AI", "Azure", "Stock Analysis"]
 categories: ["Tech Industry", "Investment Analysis"]
+mermaid: true
 ---
 
 # 微软 (MSFT) 未来裁员趋势分析

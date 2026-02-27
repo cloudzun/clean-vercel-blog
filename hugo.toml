@@ -127,3 +127,11 @@ enableEmoji = true
     GitHub = ""
     Twitter = ""
     Email = ""
+
+# -------------------------------------------------------------------------------------
+# Mermaid Diagrams Configuration
+# -------------------------------------------------------------------------------------
+[params.page.mermaid]
+  enable = true
+  # Mermaid theme ("default", "dark", "forest", "neutral")
+  theme = "default"
