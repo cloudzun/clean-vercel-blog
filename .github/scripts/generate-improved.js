@@ -356,6 +356,7 @@ ${topStoriesText}
 
     // 第四步：为 Top 10 文章生成详细摘要
     log("INFO", "第四步: 为 Top 10 文章生成详细摘要...");
+    stories.sort((a, b) => b.score - a.score);  // 按分数从高到低排序
     const topStories = stories.slice(0, 10);
     const summaries = {};
     let successCount = 0;
