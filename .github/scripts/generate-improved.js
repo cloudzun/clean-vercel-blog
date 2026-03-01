@@ -500,7 +500,22 @@ ${briefSection}
     log("INFO", `总讨论数: ${totalComments} 条`);
     log("INFO", `详细摘要成功率: ${successCount}/${topStories.length}`);
     log("INFO", `简短介绍成功率: ${briefSuccessCount}/${moreStories.length}`);
-    
+
+    // GitHub Actions 自动发布
+    if (process.env.GITHUB_ACTIONS) {
+      const { execSync } = require("child_process");
+      const postsDir = process.env.POSTS_DIR || "content/posts";
+      const dest = path.join(postsDir, filename);
+      fs.copyFileSync(outputFile, dest);
+      log("SUCCESS", `报告已复制到: ${dest}`);
+      execSync(`git config user.email "actions@github.com"`);
+      execSync(`git config user.name "GitHub Actions"`);
+      execSync(`git add ${dest}`);
+      execSync(`git commit -m "digest: HN Daily Digest ${dateStr}"`);
+      execSync(`git push origin master`);
+      log("SUCCESS", "已推送到 GitHub，Vercel 将自动部署");
+    }
+
   } catch (error) {
     log("ERROR", "任务执行失败", { error: error.message, stack: error.stack });
     process.exit(1);
@@ -511,32 +526,3 @@ main().catch((error) => {
   log("ERROR", "未捕获的异常", { error: error.message, stack: error.stack });
   process.exit(1);
 });
-
-// GitHub Actions 发布模式
-async function publishToGitHub(filename) {
-  const { execSync } = require("child_process");
-  const postsDir = process.env.POSTS_DIR || "content/posts";
-  const dest = path.join(postsDir, filename);
-
-  // 复制报告到 posts 目录
-  fs.copyFileSync(path.join(process.cwd(), filename), dest);
-  log("SUCCESS", `报告已复制到: ${dest}`);
-
-  // Git commit + push
-  execSync(`git config user.email "actions@github.com"`);
-  execSync(`git config user.name "GitHub Actions"`);
-  execSync(`git add ${dest}`);
-  execSync(`git commit -m "digest: HN Daily Digest ${filename.replace('-hn-daily-digest.md', '')}"`);
-  execSync(`git push origin master`);
-  log("SUCCESS", "已推送到 GitHub，Vercel 将自动部署");
-}
-
-// 如果在 GA 环境中，自动发布
-if (process.env.GITHUB_ACTIONS) {
-  const dateStr = new Date().toISOString().split("T")[0];
-  const filename = `${dateStr}-hn-daily-digest.md`;
-  publishToGitHub(filename).catch((e) => {
-    log("ERROR", `发布失败: ${e.message}`);
-    process.exit(1);
-  });
-}
