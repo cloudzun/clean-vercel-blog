@@ -281,7 +281,14 @@ function callRoccoAPI(prompt, retries = 2) {
           req.end();
         });
 
-        return resolve(result);
+        // 后处理：强制清除 AI 输出中的所有 Markdown 标题行（# ## ### 等）
+        const cleaned = result
+          .split("\n")
+          .filter(line => !line.trimStart().startsWith("#"))
+          .join("\n")
+          .replace(/\n{3,}/g, "\n\n")
+          .trim();
+        return resolve(cleaned);
 
       } catch (error) {
         if (error.code === 429 && attempt <= retries) {
