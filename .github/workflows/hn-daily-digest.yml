@@ -2,11 +2,11 @@ name: HN Daily Digest
 
 on:
   schedule:
-    - cron: '14 0 * * *'  # 每天 UTC 00:14
+    - cron: '14 22 * * *'  # 北京时间每天 06:14 (UTC 22:14)
   workflow_dispatch:
 
 permissions:
-  contents: write  # 允许 commit + push
+  contents: write
 
 jobs:
   generate:
@@ -24,7 +24,7 @@ jobs:
 
       - name: Generate and publish HN digest
         env:
-          ROCCO_API_KEY: ${{ secrets.ROCCO_API_KEY }}
+          BAILIAN_API_KEY: ${{ secrets.BAILIAN_API_KEY }}
           POSTS_DIR: content/posts
           GITHUB_ACTIONS: true
         run: node .github/scripts/generate-improved.js

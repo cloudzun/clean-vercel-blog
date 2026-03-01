@@ -4,7 +4,7 @@ const https = require("https");
 const fs = require("fs");
 const path = require("path");
 
-const ROCCO_API_KEY = process.env.ROCCO_API_KEY;
+const BAILIAN_API_KEY = process.env.BAILIAN_API_KEY;
 
 // ========== 日志系统 ==========
 const LOG_FILE = path.join(__dirname, "..", "hn-digest.log");
@@ -217,23 +217,23 @@ function callRoccoAPI(prompt, retries = 2) {
     for (let attempt = 1; attempt <= retries + 1; attempt++) {
       try {
         const data = JSON.stringify({
-          model: "claude-sonnet-4.6",
+          model: "qwen3.5-plus",
           max_tokens: 1200,
           messages: [{ role: "user", content: prompt }],
         });
 
         const result = await new Promise((innerResolve, innerReject) => {
           const options = {
-            hostname: "pox1.hereis.app",
+            hostname: "coding.dashscope.aliyuncs.com",
             port: 443,
-            path: "/v1/messages",
+            path: "/v1/chat/completions",
             method: "POST",
             headers: {
               "Content-Type": "application/json",
-              "x-api-key": ROCCO_API_KEY,
+              "Authorization": `Bearer ${BAILIAN_API_KEY}`,
               "Content-Length": Buffer.byteLength(data),
             },
-            timeout: 30000,
+            timeout: 60000,
           };
 
           const req = https.request(options, (res) => {
@@ -242,19 +242,10 @@ function callRoccoAPI(prompt, retries = 2) {
             res.on("end", () => {
               try {
                 const parsed = JSON.parse(responseData);
-                
                 if (parsed.error) {
-                  const errorType = parsed.error.type || "unknown";
-                  const errorMsg = parsed.error.message || "Unknown error";
-                  
-                  if (res.statusCode === 429) {
-                    innerReject({ code: 429, message: errorMsg });
-                  } else {
-                    log("ERROR", `API 错误: ${res.statusCode} ${errorType}`, { message: errorMsg });
-                    innerReject({ code: res.statusCode, message: errorMsg });
-                  }
+                  innerReject({ code: res.statusCode, message: parsed.error.message || "API error" });
                 } else {
-                  const text = parsed.content?.[0]?.text || "";
+                  const text = parsed.choices?.[0]?.message?.content || "";
                   innerResolve(text);
                 }
               } catch (e) {
@@ -273,17 +264,13 @@ function callRoccoAPI(prompt, retries = 2) {
           req.write(data);
           req.end();
         });
-        
+
         return resolve(result);
-        
+
       } catch (error) {
-        if (error.code === 429 && attempt <= retries) {
-          const waitTime = attempt * 10000 + 5000; // 15秒, 25秒
-          log("WARN", `API 限流 (429)，等待 ${waitTime/1000} 秒后重试 (${attempt}/${retries})`);
-          await new Promise(r => setTimeout(r, waitTime));
-        } else if (attempt <= retries) {
-          log("WARN", `API 错误，等待 2 秒后重试 (${attempt}/${retries})`, { error: error.message });
-          await new Promise(r => setTimeout(r, 2000));
+        if (attempt <= retries) {
+          log("WARN", `API 错误，等待 3 秒后重试 (${attempt}/${retries})`, { error: error.message });
+          await new Promise(r => setTimeout(r, 3000));
         } else {
           log("ERROR", "API 调用最终失败", { error: error.message });
           return resolve("");
@@ -293,7 +280,7 @@ function callRoccoAPI(prompt, retries = 2) {
   });
 }
 
-// ========== 主函数 ==========
+
 async function main() {
   const startTime = Date.now();
   log("INFO", "========== 启动 HN Daily Digest (改进版) ==========");
@@ -487,7 +474,7 @@ ${briefSection}
     report += `| 最热文章 | "${topStory.title}" (${topStory.score}⭐) |\n`;
     report += `| 讨论最多 | "${mostCommented.title}" (${mostCommented.comments}💬) |\n\n`;
 
-    report += `*本报告由 HN Daily Digest 自动生成 (Rocco Claude Sonnet 4.5)*\n`;
+    report += `*本报告由 HN Daily Digest 自动生成 (百炼 Qwen3.5-Plus)*\n`;
 
     const outputFile = path.join(process.cwd(), filename);
     fs.writeFileSync(outputFile, report);
