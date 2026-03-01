@@ -1,0 +1,24 @@
+name: HN Daily Digest
+
+on:
+  schedule:
+    - cron: '14 0 * * *'  # 每天 UTC 00:14
+  workflow_dispatch:       # 支持手动触发
+
+jobs:
+  generate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Generate and publish HN digest
+        env:
+          ROCCO_API_KEY: ${{ secrets.ROCCO_API_KEY }}
+          POSTS_DIR: content/posts
+        run: node .github/scripts/generate-improved.js
