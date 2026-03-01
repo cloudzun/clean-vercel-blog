@@ -341,17 +341,26 @@ ${topStoriesText}
       log("WARN", "宏观趋势摘要生成失败，将使用默认文本");
     }
 
-    // 第四步：为 Top 10 文章生成详细摘要
-    log("INFO", "第四步: 为 Top 10 文章生成详细摘要...");
-    stories.sort((a, b) => b.score - a.score);  // 按分数从高到低排序
+    // 第四步：为 Top 10 文章生成详细摘要（4 并发）
+    log("INFO", "第四步: 为 Top 10 文章生成详细摘要 (4 并发)...");
+    stories.sort((a, b) => b.score - a.score);
     const topStories = stories.slice(0, 10);
     const summaries = {};
     let successCount = 0;
 
-    for (let i = 0; i < topStories.length; i++) {
-      const story = topStories[i];
-      process.stdout.write(`\r  处理: ${i + 1}/${topStories.length}`);
+    const CONCURRENCY = 4;
+    async function processWithConcurrency(items, fn) {
+      let idx = 0;
+      async function worker() {
+        while (idx < items.length) {
+          const i = idx++;
+          await fn(items[i], i);
+        }
+      }
+      await Promise.all(Array.from({ length: CONCURRENCY }, worker));
+    }
 
+    await processWithConcurrency(topStories, async (story, i) => {
       const articleContent = await fetchArticleContent(story.url);
       const contentSection = articleContent
         ? `\n原文内容（节选）:\n${articleContent}\n`
@@ -373,26 +382,21 @@ ${contentSection}
       if (summaryText) {
         summaries[story.id] = summaryText;
         successCount++;
+        log("INFO", `  ✓ Top ${i + 1}: ${story.title.substring(0, 40)}`);
       } else {
         summaries[story.id] = `**${story.title}** 的详细分析正在生成中，请稍后查看更新版本。`;
-        log("WARN", `文章 ${i + 1} (${story.title.substring(0, 30)}...) 摘要生成失败`);
+        log("WARN", `  ✗ Top ${i + 1}: ${story.title.substring(0, 40)} 摘要失败`);
       }
-
-      await new Promise((resolve) => setTimeout(resolve, 2500));
-    }
-    console.log("");
+    });
     log("SUCCESS", `详细摘要生成完成 (成功: ${successCount}/${topStories.length})`);
 
-    // 第五步：为 11-20 文章生成简短介绍
-    log("INFO", "第五步: 为 11-20 文章生成简短介绍...");
+    // 第五步：为 11-20 文章生成简短介绍（4 并发）
+    log("INFO", "第五步: 为 11-20 文章生成简短介绍 (4 并发)...");
     const moreStories = stories.slice(10, 20);
     const briefSummaries = {};
     let briefSuccessCount = 0;
 
-    for (let i = 0; i < moreStories.length; i++) {
-      const story = moreStories[i];
-      process.stdout.write(`\r  处理: ${i + 1}/${moreStories.length}`);
-
+    await processWithConcurrency(moreStories, async (story, i) => {
       const briefContent = await fetchArticleContent(story.url);
       const briefSection = briefContent ? `\n原文内容（节选）:\n${briefContent.substring(0, 1000)}\n` : "";
 
@@ -407,14 +411,12 @@ ${briefSection}
       if (brief) {
         briefSummaries[story.id] = brief;
         briefSuccessCount++;
+        log("INFO", `  ✓ #${i + 11}: ${story.title.substring(0, 40)}`);
       } else {
         briefSummaries[story.id] = "内容简介生成中...";
-        log("WARN", `文章 ${i + 11} (${story.title.substring(0, 30)}...) 简介生成失败`);
+        log("WARN", `  ✗ #${i + 11}: ${story.title.substring(0, 40)} 简介失败`);
       }
-
-      await new Promise((resolve) => setTimeout(resolve, 1500));
-    }
-    console.log("");
+    });
     log("SUCCESS", `简短介绍生成完成 (成功: ${briefSuccessCount}/${moreStories.length})`);
 
     // 第六步：生成 Markdown 报告
