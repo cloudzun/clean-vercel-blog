@@ -134,31 +134,40 @@ function fetchStory(id, retries = 2) {
 // ========== Twitter 内容获取 ==========
 function fetchTwitterContent(url) {
   return new Promise((resolve) => {
-    const { exec } = require("child_process");
-    const scriptPath = require("path").join(__dirname, "twitter_fetcher.py");
-    
-    exec(
-      `python3 "${scriptPath}" "${url}"`,
-      { timeout: 30000 },
-      (error, stdout, stderr) => {
-        if (error) {
-          log("WARN", `Twitter 抓取失败: ${error.message}`);
-          return resolve(null);
-        }
-        
-        try {
-          const result = JSON.parse(stdout);
-          if (result.success && result.text) {
-            log("SUCCESS", `Twitter 内容获取成功 (@${result.author}, ${result.text.length} 字符)`);
-            return resolve(result.text);
+    try {
+      // 从 URL 提取 tweet ID
+      const match = url.match(/\/status\/(\d+)/);
+      if (!match) return resolve(null);
+      const tweetId = match[1];
+      
+      // 使用 FxTwitter 公开 API（无需登录/API key）
+      const apiUrl = `https://api.fxtwitter.com/status/${tweetId}`;
+      const req = https.get(apiUrl, {
+        headers: { "User-Agent": "HNDigest/1.0" },
+        timeout: 15000
+      }, (res) => {
+        let data = "";
+        res.on("data", chunk => { data += chunk; });
+        res.on("end", () => {
+          try {
+            const json = JSON.parse(data);
+            const tweet = json.tweet;
+            if (tweet && tweet.text) {
+              const text = `@${tweet.author?.screen_name || "unknown"}: ${tweet.text}\n点赞: ${tweet.likes || 0} | 转推: ${tweet.retweets || 0} | 浏览: ${tweet.views || 0}`;
+              log("SUCCESS", `Twitter 内容获取成功 (${tweet.text.length} 字符)`);
+              return resolve(text);
+            }
+          } catch (e) {
+            log("WARN", `Twitter 响应解析失败: ${e.message}`);
           }
-        } catch (e) {
-          log("WARN", `Twitter 响应解析失败: ${e.message}`);
-        }
-        
-        resolve(null);
-      }
-    );
+          resolve(null);
+        });
+      });
+      req.on("error", (e) => { log("WARN", `Twitter 请求失败: ${e.message}`); resolve(null); });
+      req.on("timeout", () => { req.destroy(); resolve(null); });
+    } catch (e) {
+      resolve(null);
+    }
   });
 }
 
@@ -464,7 +473,7 @@ ${briefSection}
     stories.slice(10, 20).forEach((story, idx) => {
       const stars = "⭐".repeat(Math.min(3, Math.ceil(story.score / 150)));
       const hnUrl = `https://news.ycombinator.com/item?id=${story.id}`;
-      report += `**${idx + 11}. ${story.title}**\n`;
+      report += `#### ${idx + 11}. ${story.title}\n`;
       report += `   ${stars} ${story.score} 分 · 💬 ${story.comments} 条\n`;
       report += `   [HN 讨论](${hnUrl}) · [原文](${story.url})\n`;
       if (briefSummaries[story.id]) {
