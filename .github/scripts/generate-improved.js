@@ -449,8 +449,10 @@ ${briefSection}
     log("INFO", "第六步: 生成 Markdown 报告...");
 
     const now = new Date();
-    const dateStr = now.toISOString().split("T")[0];
-    const timestamp = now.toLocaleString("zh-CN", { timeZone: "UTC" });
+    // 北京时间 UTC+8
+    const bjNow = new Date(now.getTime() + 8 * 3600 * 1000);
+    const dateStr = bjNow.toISOString().split("T")[0];
+    const timestamp = bjNow.toLocaleString("zh-CN", { timeZone: "Asia/Shanghai" });
     const filename = `${dateStr}-hn-daily-digest.md`;
 
     let report = `---\ntitle: "HN Daily Digest: ${dateStr}"\ndate: ${now.toISOString().substring(0, 19)}+08:00\ndraft: false\ntags: ["hacker-news", "AI", "tech-news", "daily-digest"]\ncategories: ["Technology", "News Analysis"]\n---\n\n`;
