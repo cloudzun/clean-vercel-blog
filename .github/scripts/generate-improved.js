@@ -352,7 +352,7 @@ async function main() {
 【今日热门文章】
 ${topStoriesText}
 
-请直接给出摘要，简洁有力，避免冗余。`;
+请直接给出摘要，简洁有力，避免冗余。不要输出任何 # 标题行，直接输出段落文字。`;
 
     const summary = await callRoccoAPI(trendPrompt);
     if (summary) {
@@ -391,12 +391,11 @@ ${topStoriesText}
 文章标题: ${story.title}
 文章链接: ${story.url}
 ${contentSection}
-请用流畅的段落形式写作，包含以下内容：
-- 第一段：这篇文章的核心内容是什么
-- 第二段：最重要的3-4个关键要点（用**粗体**标注重点词）
-- 第三段：为什么值得关注，对技术社区的意义
-
-不要使用标题格式（如 ### 或 ####），不要使用"核心内容："、"关键要点："这样的小标题，直接用自然段落书写。`;
+严格要求：
+- 直接输出正文内容，不要有任何标题行（不要用 #、##、###、####）
+- 不要输出"摘要："、"核心内容："、"关键要点："等小标题
+- 用自然段落书写，共3段：第一段说核心内容，第二段列3-4个关键要点（用**粗体**标注重点词），第三段说为什么值得关注
+- 如果无法获取原文，根据标题和你的知识分析，不要说"无法获取"或要求用户提供内容`;
 
       const summaryText = await callRoccoAPI(summaryPrompt);
       if (summaryText) {
@@ -496,7 +495,7 @@ ${briefSection}
     report += `| 最热文章 | "${topStory.title}" (${topStory.score}⭐) |\n`;
     report += `| 讨论最多 | "${mostCommented.title}" (${mostCommented.comments}💬) |\n\n`;
 
-    report += `*本报告由 HN Daily Digest 自动生成 (百炼 Qwen3.5-Plus)*\n`;
+    report += `*本报告由 HN Daily Digest 自动生成 (Claude Haiku 4.5)*\n`;
 
     const outputFile = path.join(process.cwd(), filename);
     fs.writeFileSync(outputFile, report);
