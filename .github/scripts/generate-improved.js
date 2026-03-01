@@ -4,7 +4,7 @@ const https = require("https");
 const fs = require("fs");
 const path = require("path");
 
-const BAILIAN_API_KEY = process.env.BAILIAN_API_KEY;
+const ROCCO_API_KEY = process.env.ROCCO_API_KEY;
 
 // ========== 日志系统 ==========
 const LOG_FILE = path.join(__dirname, "..", "hn-digest.log");
@@ -217,23 +217,23 @@ function callRoccoAPI(prompt, retries = 2) {
     for (let attempt = 1; attempt <= retries + 1; attempt++) {
       try {
         const data = JSON.stringify({
-          model: "qwen3.5-plus",
+          model: "claude-haiku-4.5",
           max_tokens: 1200,
           messages: [{ role: "user", content: prompt }],
         });
 
         const result = await new Promise((innerResolve, innerReject) => {
           const options = {
-            hostname: "coding.dashscope.aliyuncs.com",
+            hostname: "pox1.hereis.app",
             port: 443,
-            path: "/v1/chat/completions",
+            path: "/v1/messages",
             method: "POST",
             headers: {
               "Content-Type": "application/json",
-              "Authorization": `Bearer ${BAILIAN_API_KEY}`,
+              "x-api-key": ROCCO_API_KEY,
               "Content-Length": Buffer.byteLength(data),
             },
-            timeout: 60000,
+            timeout: 30000,
           };
 
           const req = https.request(options, (res) => {
@@ -243,9 +243,16 @@ function callRoccoAPI(prompt, retries = 2) {
               try {
                 const parsed = JSON.parse(responseData);
                 if (parsed.error) {
-                  innerReject({ code: res.statusCode, message: parsed.error.message || "API error" });
+                  const errorType = parsed.error.type || "unknown";
+                  const errorMsg = parsed.error.message || "Unknown error";
+                  if (res.statusCode === 429) {
+                    innerReject({ code: 429, message: errorMsg });
+                  } else {
+                    log("ERROR", `API 错误: ${res.statusCode} ${errorType}`, { message: errorMsg });
+                    innerReject({ code: res.statusCode, message: errorMsg });
+                  }
                 } else {
-                  const text = parsed.choices?.[0]?.message?.content || "";
+                  const text = parsed.content?.[0]?.text || "";
                   innerResolve(text);
                 }
               } catch (e) {
@@ -268,9 +275,13 @@ function callRoccoAPI(prompt, retries = 2) {
         return resolve(result);
 
       } catch (error) {
-        if (attempt <= retries) {
-          log("WARN", `API 错误，等待 3 秒后重试 (${attempt}/${retries})`, { error: error.message });
-          await new Promise(r => setTimeout(r, 3000));
+        if (error.code === 429 && attempt <= retries) {
+          const waitTime = attempt * 10000 + 5000;
+          log("WARN", `API 限流 (429)，等待 ${waitTime/1000} 秒后重试 (${attempt}/${retries})`);
+          await new Promise(r => setTimeout(r, waitTime));
+        } else if (attempt <= retries) {
+          log("WARN", `API 错误，等待 2 秒后重试 (${attempt}/${retries})`, { error: error.message });
+          await new Promise(r => setTimeout(r, 2000));
         } else {
           log("ERROR", "API 调用最终失败", { error: error.message });
           return resolve("");

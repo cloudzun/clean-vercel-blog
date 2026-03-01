@@ -24,7 +24,7 @@ jobs:
 
       - name: Generate and publish HN digest
         env:
-          BAILIAN_API_KEY: ${{ secrets.BAILIAN_API_KEY }}
+          ROCCO_API_KEY: ${{ secrets.ROCCO_API_KEY }}
           POSTS_DIR: content/posts
           GITHUB_ACTIONS: true
         run: node .github/scripts/generate-improved.js
