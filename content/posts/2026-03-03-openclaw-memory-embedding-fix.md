@@ -101,7 +101,7 @@ Vector dims: 1536  # ⚠️ 问题：维度不匹配
         "provider": "gemini",
         "model": "gemini-embedding-001",
         "remote": {
-          "apiKey": "AIzaSyACQlEXcCDEEnHhSJL0pg5fi2eg9K-dxvM"
+          "apiKey": "YOUR_GEMINI_API_KEY"
         }
       }
     }
