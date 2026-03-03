@@ -72,7 +72,7 @@ Vector dims: 1536  # ⚠️ 问题：维度不匹配
     "providers": {
       "gemini": {
         "baseUrl": "https://generativelanguage.googleapis.com/v1beta",
-        "apiKey": "AIzaSyACQlEXcCDEEnHhSJL0pg5fi2eg9K-dxvM",
+        "apiKey": "YOUR_GEMINI_API_KEY",
         "api": "google-generative-ai",
         "models": [
           {
