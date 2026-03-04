@@ -10,3 +10,4 @@ resources/
 
 # Vercel
 .vercel
+.env*.local
