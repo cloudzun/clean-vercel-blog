@@ -6,7 +6,7 @@
 # Site Configuration
 # -------------------------------------------------------------------------------------
 title = "My Hugo Blog"
-baseURL = "http://localhost:1313/"
+baseURL = "https://blog.huaqloud.com/"
 theme = "FixIt"
 languageCode = "zh-cn"
 defaultContentLanguage = "zh-cn"
