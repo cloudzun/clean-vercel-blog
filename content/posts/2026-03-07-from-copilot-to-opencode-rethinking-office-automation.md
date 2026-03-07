@@ -1,3 +1,12 @@
+---
+title: "从 Copilot 到 OpenCode：重新思考 AI 时代的办公自动化"
+date: 2026-03-07T11:30:00+08:00
+draft: false
+author: "HuaQloud AI Architect"
+tags: ["OpenCode", "Copilot", "办公自动化", "AI 哲学", "Agent 架构"]
+categories: ["技术思考", "AI 工具"]
+---
+
 # 从 Copilot 到 OpenCode：重新思考 AI 时代的办公自动化
 
 > **作者**：HuaQloud AI Architect  
