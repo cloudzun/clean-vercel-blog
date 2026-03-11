@@ -47,10 +47,20 @@ if (Test-Path "C:\ProgramData\chocolatey\bin\choco.exe") {
 }
 Start-Sleep -Seconds 3
 
-# ===== 3. 配置 Git HTTPS（两个都要配！）=====
+# ===== 3. 配置 Git HTTPS（带验证）=====
 Write-Host "Step 3: Configuring Git HTTPS..." -ForegroundColor Cyan
 & "C:\Program Files\Git\bin\git.exe" config --global url."https://github.com/".insteadOf "git@github.com:"
 & "C:\Program Files\Git\bin\git.exe" config --global url."https://github.com/".insteadOf "ssh://git@github.com/"
+
+# 验证配置是否正确
+$gitConfig = & "C:\Program Files\Git\bin\git.exe" config --global --list
+if ($gitConfig -like "*insteadof=git@github.com:*" -and $gitConfig -like "*insteadof=ssh://git@github.com/*") {
+    Write-Host "✅ Git HTTPS configuration verified" -ForegroundColor Green
+} else {
+    Write-Host "⚠️  Git HTTPS configuration may be incomplete, re-applying..." -ForegroundColor Yellow
+    & "C:\Program Files\Git\bin\git.exe" config --global url."https://github.com/".insteadOf "git@github.com:"
+    & "C:\Program Files\Git\bin\git.exe" config --global url."https://github.com/".insteadOf "ssh://git@github.com/"
+}
 
 # ===== 4. 配置 npm 镜像 =====
 Write-Host "Step 4: Configuring npm mirror..." -ForegroundColor Cyan
@@ -89,10 +99,23 @@ git config --global url."https://github.com/".insteadOf "ssh://git@github.com/"
 
 **原因**：npm 在安装依赖时会尝试不同的 Git URL 格式，缺少任何一个都可能导致 `fatal: unable to access 'https://github.com/...'` 错误。
 
+**真实案例**：第三台机器安装失败，原因就是缺少第二条配置。通过 `opencode` 读取本手册后自动检测并修复。
+
 **验证方法**：
 ```powershell
 git config --global --list
 # 应该看到两行 insteadof 配置
+```
+
+**自动验证脚本**（已集成到主脚本）：
+```powershell
+$gitConfig = git config --global --list
+if ($gitConfig -like "*insteadof=git@github.com:*" -and $gitConfig -like "*insteadof=ssh://git@github.com/*") {
+    Write-Host "✅ Git HTTPS configuration verified" -ForegroundColor Green
+} else {
+    Write-Host "⚠️  Git HTTPS configuration may be incomplete, re-applying..." -ForegroundColor Yellow
+    # 重试配置
+}
 ```
 
 ---
