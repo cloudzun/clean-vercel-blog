@@ -1,7 +1,7 @@
 ---
 title: "当 AI 成为你的'技术外骨骼'：两个实验项目带来的启发"
-date: 2026-03-12T09:00:00+00:00
-lastmod: 2026-03-12T09:00:00+00:00
+date: "2026-03-12"
+lastmod: "2026-03-12"
 draft: false
 categories: ["技术随笔"]
 tags: ["AI", "Vibe Coding", "Skill 开发", "技术民主化"]
