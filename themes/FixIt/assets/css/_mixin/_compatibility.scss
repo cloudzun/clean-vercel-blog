@@ -1,4 +1,4 @@
-@mixin border-radius($value) {
+@mixin border-radius($value: 4px) {
   -webkit-border-radius: $value;
   -moz-border-radius: $value;
   border-radius: $value;
