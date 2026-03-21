@@ -4,121 +4,162 @@ date: 2026-02-27T09:00:00+08:00
 draft: false
 ---
 
-# 关于 HuaQloud Blog
+# 👋 你好，我是 HuaQloud 
 
-## 🎯 研究方向
+## 🎯 身份标签
 
-HuaQloud Blog 是一个专注于**人工智能与云原生技术**的技术研究平台，由 HuaQloud AI Research 团队维护。我们致力于跟踪前沿技术趋势，深入分析行业动态，为技术从业者和企业决策者提供有价值的洞察。
+- **讲师** 🎓 - AI 协同编程与 Vibe Coding 方法论布道者，设计并交付多套企业培训课程
+- **工程师** 💻 - 专注于 AI Agent 工作流、LLM 应用开发和自动化实践
+- **博主** 📝 - 分享 AI、自动化和开发经验，已发布 115+ 篇技术文章
 
-### 核心主题
-
-**🤖 人工智能应用**
-- Agentic AI（代理式 AI）在企业场景中的落地实践
-- 大语言模型（LLM）的技术演进与工程化部署
-- AI 辅助编程工具与 DevOps 自动化
-- 机器学习基础设施与模型优化
-
-**☁️ 云原生技术**
-- Kubernetes 编排与资源优化
-- 微服务架构设计模式
-- CI/CD 管道自动化与最佳实践
-- 云基础设施成本优化策略
-
-**📊 技术趋势分析**
-- 科技行业每日快讯（Hacker News Daily Digest）
-- M7 科技股票周报（AI ROI 视角分析）
-- 新兴技术的商业影响评估
-- 开源项目与工具评测
-
-**🛠 工程实践**
-- DevOps 工具链选型与集成
-- 搜索引擎优化（SearxNG 等开源方案）
-- 自动化工作流设计
-- 技术债务管理与重构策略
+> **核心理念**：人类保持架构决策权与质量判断，AI 负责代码执行与方案生成——在每个开发环节持续交互、相互增强。
 
 ---
 
-## 📝 内容特色
+## 🔬 研究与应用方向
 
-### 1. 数据驱动的分析
-我们的研究报告基于真实的行业数据、技术指标和市场动态，而非空泛的理论讨论。每篇文章都包含：
-- 可验证的数据来源（DevOps.com, TechCrunch, GitHub Trending 等）
-- 量化的性能指标与成本对比
-- 实际案例与最佳实践参考
+基于在 **AI 协同编程教育** 和 **Agentic AI 工作流** 领域的实践，专注于以下方向：
 
-### 2. 技术深度与业务视角的结合
-我们不仅关注"如何实现"（How），更关注"为什么重要"（Why）和"商业价值"（ROI）：
-- 技术选型的成本收益分析
-- 企业数字化转型的战略建议
-- 新技术的成熟度评估与风险提示
+### 1. AI 协同编程教育体系
 
-### 3. 自动化驱动的内容生产
-作为 AI 研究团队，我们实践"吃自己的狗粮"：
-- 使用 AI 辅助研究与写作（但保持人工审核与编辑）
-- 自动化数据采集与分析流程
-- 持续优化内容生成质量
+设计并交付系统化的 AI 编程课程，帮助开发者掌握与 AI 协作的新范式：
 
----
+- **OpenCode Labs** - 15 个渐进式实验，从终端 TUI 到多 Agent 协同
+- **LLM Chatbot Workshop** - 从零构建具备 RAG、Function Calling、MCP 协议的聊天机器人
+- **核心方法**：用自然语言驱动代码生成，人类定义"做什么"和"为什么"，AI 负责"怎么做"
 
-## 🔧 技术栈
+### 2. Vibe Coding 方法论
 
-**内容生成**
-- **AI 模型**: Claude Sonnet 4.5, Qwen, GPT-4
-- **数据源**: Hacker News API, Yahoo Finance API, SearxNG, GitHub API
-- **自动化**: Python, Bash, Cron Jobs
+探索"放手让 AI 写代码"的边界与质量保障机制：
 
-**博客基础设施**
-- **静态站点生成**: Hugo (FixIt Theme)
-- **托管平台**: Vercel (公网) + 本地 Hugo Server (内网)
-- **版本控制**: Git + GitHub
-- **CI/CD**: 自动化发布脚本
+- **Vibe Coding Camp** - 3 款产品 × 5 轮迭代，独立开发者实操训练
+- **Vibe Ecommerce** - 从原型到生产级全栈应用的 6 阶段演进记录
+- **7-Gate 质量门控**：每个迭代阶段经过完整的验收流程，不跳过任何一关
 
----
+### 3. 企业办公自动化培训
 
-## 🌟 定期专栏
+将 AI 编程能力赋能给非技术背景的办公人群：
 
-### 📰 HN Daily Digest
-**频率**: 每日（UTC 00:14）  
-**内容**: 精选 Hacker News 热门技术文章，提供中文摘要与趋势分析
+- **Vibe Working** - 适配 Microsoft MS-4004 课程，10 个办公场景 × 50+ 实验
+- **适用人群**：高管、销售、财务、HR、市场、运营、法务等
+- **核心理念**：零基础友好，用自然语言描述需求即可提升效率
 
-### 📈 M7 股票周报
-**频率**: 每周六（UTC 00:34）  
-**内容**: 从 AI ROI 视角分析科技七巨头（Google, Microsoft, Amazon, Meta, Apple, Tesla, Nvidia）的业务进展与投资价值
+### 4. Agentic AI 工作流实践
 
-### 🔬 深度技术报告
-**频率**: 不定期  
-**内容**: 针对特定技术领域的综合研究报告（如 Agentic AI、Kubernetes 自主化、云成本优化等）
+深度使用并研究新一代 AI 编程工具链：
+
+- **工具栈**：OpenClaw、OpenCode、Claude Code、Cursor
+- **应用场景**：自定义 Agent、并行多实例、规格驱动开发 (SDD)、代码审查流水线
+- **技术心得**：75+ LLM 提供商配置、国内服务适配（阿里云百炼）、多 Agent 协同编排
 
 ---
 
-## 📧 联系方式
+## 🚀 代表项目
 
-**Email**: abrahamc@cloudzun.com  
-**GitHub**: [cloudzun](https://github.com/cloudzun)  
-**Blog**: 
-- 公网: https://blog.huaqloud.com
-- 内网: https://clawblog.huaqloud.com
+### 教育类项目
+
+| 项目 | 描述 | 链接 |
+|------|------|------|
+| **OpenCode Labs** | AI 协同编程实战手册，15 个实验从基础到 SDD 规格驱动开发 | [GitHub](https://github.com/cloudzun/opencode-labs) |
+| **Vibe Coding Camp** | 独立开发者实操营，3 款产品×5 轮迭代完整课程 | [GitHub](https://github.com/cloudzun/vibe-coding-camp) |
+| **LLM Chatbot Workshop** | 从零构建 AI 聊天机器人，涵盖 RAG、Function Calling、MCP 协议 | [GitHub](https://github.com/cloudzun/llm-chatbot-workshop) |
+| **Vibe Working** | 企业办公自动化培训，10 个场景 50+ 实验，零基础友好 | [GitHub](https://github.com/cloudzun/vibe-working) |
+
+### 工程实践类项目
+
+| 项目 | 描述 | 链接 |
+|------|------|------|
+| **Vibe Ecommerce** | 从 Vibe Coding 原型到生产级全栈应用的完整演进记录（6 阶段） | [GitHub](https://github.com/cloudzun/vibe-ecommerce) |
+| **HN Daily Digest** | Hacker News 每日精选，AI 生成深度分析摘要，自动发布 | [博客文章](/posts/2026-03-21-hn-daily-digest/) |
+| **M7 Stock Analysis** | 科技巨头投资分析系统，自动采集数据 + 新闻，生成报告 | [博客文章](/posts/2026-03-07-m7-analysis-cn/) |
 
 ---
 
-## 📄 版权声明
+## 💼 技术培训与咨询服务
 
-本博客所有原创内容采用 **CC BY-NC-SA 4.0** 许可协议：
-- ✅ 允许转载（需注明出处）
-- ✅ 允许修改和演绎
-- ❌ 禁止商业使用
-- ⚠️ 相同方式共享（衍生作品需使用相同协议）
+我提供以下领域的技术培训和咨询顾问服务：
 
-引用的第三方内容（新闻报道、技术文档等）版权归原作者所有。
+### 培训课程
+
+- **AI 协同编程工作坊** - 1-2 天密集训练，掌握 OpenCode/Claude Code 工作流
+- **Vibe Coding 实战营** - 4 周项目制学习，从原型到生产级应用
+- **企业办公自动化** - 针对非技术团队的 AI 效率提升培训
+- **LLM 应用开发** - RAG、Function Calling、MCP 协议实战
+
+### 咨询服务
+
+- AI 工作流设计与优化
+- Agentic AI 系统架构评审
+- 技术团队 AI 能力建设
+- 自动化机会识别与实施
+
+📧 **联系邮箱**: [info@cloudzun.com](mailto:info@cloudzun.com)
 
 ---
 
-## 🚀 未来计划
+## 📚 技术栈
 
-- **多语言支持**: 逐步增加英文内容，服务全球读者
-- **交互式工具**: 提供在线计算器、决策树等实用工具
-- **社区建设**: 开放评论系统，促进技术讨论
-- **视频内容**: 探索技术讲解视频与 Podcast
+| 领域 | 技术/工具 |
+|------|----------|
+| **AI 编程助手** | OpenCode, OpenClaw, Claude Code, Cursor, GitHub Copilot |
+| **LLM 服务** | 阿里云百炼，硅基流动，Rocco, Anthropic, OpenAI |
+| **编程语言** | Python, JavaScript, TypeScript, Node.js |
+| **前端框架** | Astro, React, Next.js, Tailwind CSS, Vanilla JS |
+| **后端技术** | Express, FastAPI, Knex, SQLite, PostgreSQL |
+| **AI 技术** | RAG, Function Calling, MCP Protocol, Embedding, Agent 编排 |
+| **部署运维** | Docker, GitHub Actions, Vercel, Azure, GitHub Pages |
+
+---
+
+
+## 📬 联系方式
+
+**欢迎交流技术问题、培训合作或 AI 应用探讨！**
+
+- **微信**: flagzun
+- **GitHub**: [@cloudzun](https://github.com/cloudzun)
+- **网站**: [www.cloudzun.com](https://www.cloudzun.com/)
+- **博客**: [blog.huaqloud.com](https://blog.huaqloud.com/)
+- **邮件**: [info@cloudzun.com](mailto:info@cloudzun.com)
+- **LinkedIn**: [linkedin.com/in/cloudzun](https://www.linkedin.com/in/cloudzun)
+- **Telegram**: [@cloudzun](https://t.me/cloudzun)
+
+---
+
+## 🌟 网站技术
+
+这个网站本身也是一个教学案例——**从搭建、内容迁移到后续运维，全部由我指挥 OpenClaw 完成**：
+
+- **框架**: Astro 6 + Tailwind CSS
+- **主题**: Astro Paper（高度定制）
+- **部署**: GitHub Actions → GitHub Pages
+- **搜索**: Pagefind
+- **域名**: www.cloudzun.com（自定义 CNAME）
+- **构建时间**: ~5 秒
+- **文章数**: 115 篇（自动化迁移）
+
+### 自动化工作流
+
+```
+Git Push → GitHub Actions → npm build → Deploy to Pages → CDN 刷新
+```
+
+这也是 **AI 协同编程** 的实战案例：人类定义目标和审美，AI 负责执行细节。
+
+---
+
+## 💡 座右铭
+
+> **"Automate the boring stuff. Focus on what matters."**
+
+自动化无聊的事情，专注于重要的事情。
+
+> **"人类定义'做什么'和'为什么'，AI 负责'怎么做'。"**
+
+AI 协同编程的核心原则。
+
+---
+
 
 ---
 
