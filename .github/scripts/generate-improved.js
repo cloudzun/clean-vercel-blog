@@ -155,6 +155,7 @@ function fetchTwitterContent(url) {
         headers: { "User-Agent": "HNDigest/1.0" },
         timeout: 15000
       }, (res) => {
+        res.setEncoding("utf8");
         let data = "";
         res.on("data", chunk => { data += chunk; });
         res.on("end", () => {
@@ -255,6 +256,7 @@ function fetchArticleContent(url, depth = 0) {
           return fetchArticleContent(next, depth + 1).then(resolve).catch(() => resolve(null));
         }
         if (res.statusCode !== 200) { res.resume(); return resolve(null); }
+        res.setEncoding("utf8");
         let data = "";
         res.on("data", (chunk) => { if (data.length < MAX_BODY_SIZE) data += chunk; });
         res.on("end", () => {
@@ -264,6 +266,7 @@ function fetchArticleContent(url, depth = 0) {
             .replace(/<[^>]+>/g, " ")
             .replace(/\s+/g, " ")
             .trim()
+            .replace(/\uFFFD/g, "")
             .substring(0, 3000);
           resolve(text.length > 100 ? text : null);
         });
@@ -306,6 +309,7 @@ function callDeepSeekAPI(prompt, retries = 2) {
           };
 
           const req = https.request(options, (res) => {
+            res.setEncoding("utf8");
             let responseData = "";
             res.on("data", (chunk) => { responseData += chunk; });
             res.on("end", () => {
@@ -343,6 +347,7 @@ function callDeepSeekAPI(prompt, retries = 2) {
 
         // 后处理：强制清除 AI 输出中的所有 Markdown 标题行（# ## ### 等）
         const cleaned = result
+          .replace(/\uFFFD/g, "")
           .split("\n")
           .filter(line => !line.trimStart().startsWith("#"))
           .join("\n")
