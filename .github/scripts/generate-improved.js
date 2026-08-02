@@ -4,7 +4,7 @@ const https = require("https");
 const fs = require("fs");
 const path = require("path");
 
-const ROCCO_API_KEY = process.env.ROCCO_API_KEY;
+const DEEPSEEK_API_KEY = process.env.DEEPSEEK_API_KEY;
 
 // ========== 日志系统 ==========
 const LOG_FILE = path.join(__dirname, "..", "hn-digest.log");
@@ -220,26 +220,26 @@ function fetchArticleContent(url) {
   });
 }
 
-// ========== Rocco API 调用（带重试和详细日志）==========
-function callRoccoAPI(prompt, retries = 2) {
+// ========== DeepSeek API 调用（带重试和详细日志）==========
+function callDeepSeekAPI(prompt, retries = 2) {
   return new Promise(async (resolve) => {
     for (let attempt = 1; attempt <= retries + 1; attempt++) {
       try {
         const data = JSON.stringify({
-          model: "claude-haiku-4.5",
-          max_tokens: 1200,
+          model: "deepseek-v4-flash",
+          max_tokens: 4000,
           messages: [{ role: "user", content: prompt }],
         });
 
         const result = await new Promise((innerResolve, innerReject) => {
           const options = {
-            hostname: "pox1.hereis.app",
+            hostname: "api.deepseek.com",
             port: 443,
-            path: "/v1/messages",
+            path: "/v1/chat/completions",
             method: "POST",
             headers: {
               "Content-Type": "application/json",
-              "x-api-key": ROCCO_API_KEY,
+              "Authorization": `Bearer ${DEEPSEEK_API_KEY}`,
               "Content-Length": Buffer.byteLength(data),
             },
             timeout: 30000,
@@ -261,7 +261,7 @@ function callRoccoAPI(prompt, retries = 2) {
                     innerReject({ code: res.statusCode, message: errorMsg });
                   }
                 } else {
-                  const text = parsed.content?.[0]?.text || "";
+                  const text = parsed.choices?.[0]?.message?.content || "";
                   innerResolve(text);
                 }
               } catch (e) {
@@ -361,7 +361,7 @@ ${topStoriesText}
 
 请直接给出摘要，简洁有力，避免冗余。不要输出任何 # 标题行，直接输出段落文字。`;
 
-    const summary = await callRoccoAPI(trendPrompt);
+    const summary = await callDeepSeekAPI(trendPrompt);
     if (summary) {
       log("SUCCESS", "宏观趋势摘要生成完成");
     } else {
@@ -404,7 +404,7 @@ ${contentSection}
 - 用自然段落书写，共3段：第一段说核心内容，第二段列3-4个关键要点（用**粗体**标注重点词），第三段说为什么值得关注
 - 如果无法获取原文，根据标题和你的知识分析，不要说"无法获取"或要求用户提供内容`;
 
-      const summaryText = await callRoccoAPI(summaryPrompt);
+      const summaryText = await callDeepSeekAPI(summaryPrompt);
       if (summaryText) {
         summaries[story.id] = summaryText;
         successCount++;
@@ -433,7 +433,7 @@ ${contentSection}
 ${briefSection}
 只需要一句话，不要重复标题。`;
 
-      const brief = await callRoccoAPI(briefPrompt);
+      const brief = await callDeepSeekAPI(briefPrompt);
       if (brief) {
         briefSummaries[story.id] = brief;
         briefSuccessCount++;
@@ -459,7 +459,7 @@ ${briefSection}
     report += `# 📰 HN 每日精选日报\n\n`;
     report += `**生成时间**: ${timestamp} (UTC)\n`;
     report += `**数据来源**: Hacker News (https://news.ycombinator.com)\n`;
-    report += `**AI 分析**: Rocco Claude Sonnet 4.5\n\n`;
+    report += `**AI 分析**: DeepSeek V4 Flash\n\n`;
 
     report += `## 📝 今日看点\n\n`;
     report += summary ? `${summary}\n\n` : `*分析中...*\n\n`;
@@ -504,7 +504,7 @@ ${briefSection}
     report += `| 最热文章 | "${topStory.title}" (${topStory.score}⭐) |\n`;
     report += `| 讨论最多 | "${mostCommented.title}" (${mostCommented.comments}💬) |\n\n`;
 
-    report += `*本报告由 HN Daily Digest 自动生成 (Claude Haiku 4.5)*\n`;
+    report += `*本报告由 HN Daily Digest 自动生成 (DeepSeek V4 Flash)*\n`;
 
     const outputFile = path.join(process.cwd(), filename);
     fs.writeFileSync(outputFile, report);
