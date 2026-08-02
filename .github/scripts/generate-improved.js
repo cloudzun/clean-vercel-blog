@@ -8,6 +8,13 @@ const path = require("path");
 
 const DEEPSEEK_API_KEY = process.env.DEEPSEEK_API_KEY;
 
+// ========== 系统提示（三个任务共用）==========
+const SYSTEM_PROMPT = `你是严谨的中文技术新闻摘要助手。输出规则：
+1) 只用简体中文，直接输出结果，不要开场白或解释；
+2) 不要输出 Markdown 标题、HTML 标签或"摘要："之类的标签；
+3) 只依据提供的原文或标题信息概括，原文缺失时仅按标题保守概括，绝不编造文章中没有的具体数字、日期、人名或细节；
+4) 信息密度高，避免空话套话。`;
+
 // ========== 日志系统 ==========
 const LOG_FILE = path.join(__dirname, "..", "hn-digest.log");
 
@@ -278,7 +285,10 @@ function callDeepSeekAPI(prompt, retries = 2) {
         const data = JSON.stringify({
           model: "deepseek-v4-flash",
           max_tokens: 4000,
-          messages: [{ role: "user", content: prompt }],
+          messages: [
+            { role: "system", content: SYSTEM_PROMPT },
+            { role: "user", content: prompt },
+          ],
         });
 
         const result = await new Promise((innerResolve, innerReject) => {
@@ -400,16 +410,19 @@ async function main() {
     // 第三步：生成宏观趋势摘要
     log("INFO", "第三步: 生成宏观趋势摘要...");
     const topStoriesText = stories
-      .slice(0, 5)
+      .slice(0, 10)
       .map((s, i) => `${i + 1}. 《${s.title}》 (${s.score}⭐ · ${s.comments}💬)`)
       .join("\n");
 
-    const trendPrompt = `你是一个资深的技术新闻分析师。请基于以下 Hacker News 当前热门文章，用中文生成一份简短精悍的日报摘要（3-5 句话），总结当今技术圈的关键趋势和热点：
+    const trendPrompt = `请基于以下 Hacker News 今日热门文章，用简体中文写一段 3-5 句的"今日看点"，概括当天技术圈的主要趋势与热点。
 
-【今日热门文章】
+【今日热门文章（Top 10，按热度排序）】
 ${topStoriesText}
 
-请直接给出摘要，简洁有力，避免冗余。不要输出任何 # 标题行，直接输出段落文字，不要输出任何 HTML 标签。`;
+要求：
+- 从标题和热度中归纳共同主题与对比，不要臆造标题之外的具体事实。
+- 若文章之间没有明显共性，就如实介绍几类热点，不要强行总结。
+- 直接输出段落，不要列表、标题或 HTML。`;
 
     const summary = await callDeepSeekAPI(trendPrompt);
     if (summary) {
@@ -443,17 +456,16 @@ ${topStoriesText}
         ? `\n原文内容（节选）:\n${articleContent}\n`
         : `\n（原文无法抓取，请根据标题和你的知识进行分析）\n`;
 
-      const summaryPrompt = `请用中文为以下技术文章生成一份详细的内容摘要（150-200字）。
+    const summaryPrompt = `请用简体中文为下面这篇文章写一篇内容摘要（300-500字，自然段落），把文章的核心内容交代清楚。
 
 文章标题: ${story.title}
 文章链接: ${story.url}
 ${contentSection}
-严格要求：
-- 直接输出正文内容，不要有任何标题行（不要用 #、##、###、####）
-- 不要输出任何 HTML 标签（如 <div>、<script> 等）
-- 不要输出"摘要："、"核心内容："、"关键要点："等小标题
-- 用自然段落书写，共3段：第一段说核心内容，第二段列3-4个关键要点（用**粗体**标注重点词），第三段说为什么值得关注
-- 如果无法获取原文，根据标题和你的知识分析，不要说"无法获取"或要求用户提供内容`;
+要求：
+- 重点是让没读过原文的人也能明白：这篇文章到底讲了什么、核心观点是什么、有哪些关键信息。
+- 建议按 3 段组织：第1段概述文章主题与核心内容；第2段展开 2-3 个关键要点，用**粗体**标出重点词；第3段简短说明值得关注的原因（不超过2句，没有独特价值可略去）。
+- 只依据原文信息，不要编造具体数字、日期、人名或细节。
+- 不要输出标题、HTML 或"摘要："标签。`;
 
       const summaryText = await callDeepSeekAPI(summaryPrompt);
       if (summaryText) {
@@ -477,12 +489,15 @@ ${contentSection}
       const briefContent = await fetchArticleContent(story.url);
       const briefSection = briefContent ? `\n原文内容（节选）:\n${briefContent.substring(0, 1000)}\n` : "";
 
-      const briefPrompt = `请用中文为以下技术文章生成一句话简介（30-50字），简明扼要地说明这篇文章的核心内容或价值：
+    const briefPrompt = `请为下面这篇文章写一句中文简介。
 
 文章标题: ${story.title}
 文章链接: ${story.url}
 ${briefSection}
-只需要一句话，不要重复标题，不要输出 HTML 标签。`;
+要求：
+- 一句话，不超过 50 个汉字，直接输出这句话本身。
+- 概括这篇文章的核心内容或价值，不要重复标题，不要输出任何解释、分析、列表或 HTML。
+- 只依据标题/原文信息，不要编造细节。`;
 
       const brief = await callDeepSeekAPI(briefPrompt);
       if (brief) {
