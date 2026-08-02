@@ -1,6 +1,8 @@
 #!/usr/bin/env node
 
 const https = require("https");
+const http = require("http");
+const dns = require("dns");
 const fs = require("fs");
 const path = require("path");
 
@@ -176,10 +178,51 @@ function isTwitterUrl(url) {
   return /https?:\/\/(www\.)?(twitter\.com|x\.com)\/[^\/]+\/status\/\d+/.test(url);
 }
 
+// ========== URL 安全校验（防 SSRF / 内网探测）==========
+const MAX_BODY_SIZE = 1024 * 1024; // 响应体上限 1MB
+const MAX_REDIRECTS = 3;           // 重定向深度上限
+
+function isPrivateIP(ip) {
+  if (!ip) return true;
+  if (ip.includes(":")) {
+    const v = ip.toLowerCase();
+    return v === "::1" || v.startsWith("fc") || v.startsWith("fd") || /^fe[89ab]/.test(v) || v.startsWith("::ffff:");
+  }
+  const p = ip.split(".").map(Number);
+  if (p.length !== 4) return true;
+  if (p[0] === 0 || p[0] === 10 || p[0] === 127) return true;
+  if (p[0] === 169 && p[1] === 254) return true;          // link-local（含云元数据 169.254.169.254）
+  if (p[0] === 172 && p[1] >= 16 && p[1] <= 31) return true;
+  if (p[0] === 192 && p[1] === 168) return true;
+  if (p[0] === 100 && p[1] >= 64 && p[1] <= 127) return true; // CGNAT
+  return false;
+}
+
+function isSafeUrl(url) {
+  return new Promise((resolve) => {
+    try {
+      const u = new URL(url);
+      if (u.protocol !== "http:" && u.protocol !== "https:") return resolve(false);
+      const h = u.hostname.toLowerCase();
+      if (h === "localhost" || h.endsWith(".localhost") || h.endsWith(".local") || h.endsWith(".internal") || h.endsWith(".localdomain")) {
+        return resolve(false);
+      }
+      dns.lookup(u.hostname, { family: 4 }, (err, addr) => {
+        if (err) return resolve(false);
+        resolve(!isPrivateIP(addr));
+      });
+    } catch (e) {
+      resolve(false);
+    }
+  });
+}
+
 // ========== 获取文章内容（支持 Twitter）==========
-function fetchArticleContent(url) {
+function fetchArticleContent(url, depth = 0) {
   return new Promise(async (resolve) => {
     try {
+      if (depth > MAX_REDIRECTS) return resolve(null);
+
       // 优先检测 Twitter
       if (isTwitterUrl(url)) {
         const twitterContent = await fetchTwitterContent(url);
@@ -187,20 +230,26 @@ function fetchArticleContent(url) {
           return resolve(twitterContent);
         }
       }
+
+      // SSRF 防护
+      if (!(await isSafeUrl(url))) return resolve(null);
       
       // 原有逻辑
       const urlObj = new URL(url);
       if (url.endsWith(".pdf") || url.includes("youtube.com") || url.includes("youtu.be")) {
         return resolve(null);
       }
-      const lib = urlObj.protocol === "https:" ? require("https") : require("http");
+      const lib = urlObj.protocol === "https:" ? https : http;
       const req = lib.get(url, { headers: { "User-Agent": "Mozilla/5.0 (compatible; HNDigest/1.0)" }, timeout: 8000 }, (res) => {
-        if ((res.statusCode === 301 || res.statusCode === 302) && res.headers.location) {
-          return fetchArticleContent(res.headers.location).then(resolve).catch(() => resolve(null));
+        if ([301, 302, 303, 307, 308].includes(res.statusCode) && res.headers.location) {
+          res.resume();
+          let next;
+          try { next = new URL(res.headers.location, url).toString(); } catch (e) { return resolve(null); }
+          return fetchArticleContent(next, depth + 1).then(resolve).catch(() => resolve(null));
         }
-        if (res.statusCode !== 200) return resolve(null);
+        if (res.statusCode !== 200) { res.resume(); return resolve(null); }
         let data = "";
-        res.on("data", (chunk) => { data += chunk; });
+        res.on("data", (chunk) => { if (data.length < MAX_BODY_SIZE) data += chunk; });
         res.on("end", () => {
           const text = data
             .replace(/<script[\s\S]*?<\/script>/gi, "")
@@ -211,6 +260,7 @@ function fetchArticleContent(url) {
             .substring(0, 3000);
           resolve(text.length > 100 ? text : null);
         });
+        res.on("error", () => resolve(null));
       });
       req.on("error", () => resolve(null));
       req.on("timeout", () => { req.destroy(); resolve(null); });
@@ -257,7 +307,7 @@ function callDeepSeekAPI(prompt, retries = 2) {
                   if (res.statusCode === 429) {
                     innerReject({ code: 429, message: errorMsg });
                   } else {
-                    log("ERROR", `API 错误: ${res.statusCode} ${errorType}`, { message: errorMsg });
+                    log("ERROR", `API 错误: ${res.statusCode} ${errorType}: ${errorMsg}`);
                     innerReject({ code: res.statusCode, message: errorMsg });
                   }
                 } else {
@@ -359,7 +409,7 @@ async function main() {
 【今日热门文章】
 ${topStoriesText}
 
-请直接给出摘要，简洁有力，避免冗余。不要输出任何 # 标题行，直接输出段落文字。`;
+请直接给出摘要，简洁有力，避免冗余。不要输出任何 # 标题行，直接输出段落文字，不要输出任何 HTML 标签。`;
 
     const summary = await callDeepSeekAPI(trendPrompt);
     if (summary) {
@@ -400,6 +450,7 @@ ${topStoriesText}
 ${contentSection}
 严格要求：
 - 直接输出正文内容，不要有任何标题行（不要用 #、##、###、####）
+- 不要输出任何 HTML 标签（如 <div>、<script> 等）
 - 不要输出"摘要："、"核心内容："、"关键要点："等小标题
 - 用自然段落书写，共3段：第一段说核心内容，第二段列3-4个关键要点（用**粗体**标注重点词），第三段说为什么值得关注
 - 如果无法获取原文，根据标题和你的知识分析，不要说"无法获取"或要求用户提供内容`;
@@ -431,7 +482,7 @@ ${contentSection}
 文章标题: ${story.title}
 文章链接: ${story.url}
 ${briefSection}
-只需要一句话，不要重复标题。`;
+只需要一句话，不要重复标题，不要输出 HTML 标签。`;
 
       const brief = await callDeepSeekAPI(briefPrompt);
       if (brief) {
@@ -518,6 +569,15 @@ ${briefSection}
     log("INFO", `总讨论数: ${totalComments} 条`);
     log("INFO", `详细摘要成功率: ${successCount}/${topStories.length}`);
     log("INFO", `简短介绍成功率: ${briefSuccessCount}/${moreStories.length}`);
+
+    // 发布前检查：AI 摘要成功率过低时放弃发布，让 CI 显示失败，避免发布大量兜底文本
+    const totalNeeded = topStories.length + moreStories.length;
+    const totalOk = successCount + briefSuccessCount;
+    const successRate = totalNeeded ? totalOk / totalNeeded : 0;
+    if (successRate < 0.5) {
+      log("ERROR", `AI 摘要成功率过低 (${successCount}/${topStories.length} + ${briefSuccessCount}/${moreStories.length})，放弃发布，请检查 API`);
+      process.exit(1);
+    }
 
     // GitHub Actions 自动发布
     if (process.env.GITHUB_ACTIONS) {

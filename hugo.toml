@@ -14,6 +14,7 @@ defaultContentLanguage = "zh-cn"
 # Build settings
 enableRobotsTXT = true
 enableEmoji = true
+enableGitInfo = true
 
 # -------------------------------------------------------------------------------------
 # Markup Configuration
@@ -24,8 +25,8 @@ enableEmoji = true
     noClasses = false
     style = "monokai"
   [markup.goldmark]
-    [markup.goldmark.renderer]
-      unsafe = true
+  [markup.goldmark.renderer]
+      unsafe = false
 
 # -------------------------------------------------------------------------------------
 # Menu Configuration
@@ -65,13 +66,13 @@ enableEmoji = true
 # -------------------------------------------------------------------------------------
 [params]
   # FixIt theme version
-  version = "0.3.X"
+  version = "0.4.3"
   
   # Site default theme ("light", "dark", "auto")
   defaultTheme = "auto"
   
   # Public git repo url only then enableGitInfo is true
-  gitRepo = ""
+  gitRepo = "https://github.com/cloudzun/clean-vercel-blog"
   
   # Header config
   [params.header]
@@ -124,9 +125,11 @@ enableEmoji = true
     
   # Social config
   [params.social]
-    GitHub = ""
+    GitHub = "cloudzun"
+    Linkedin = "cloudzun"
+    Telegram = "cloudzun"
     Twitter = ""
-    Email = ""
+    Email = "info@cloudzun.com"
 
 # -------------------------------------------------------------------------------------
 # Mermaid Diagrams Configuration
@@ -135,3 +138,8 @@ enableEmoji = true
   enable = true
   # Mermaid theme ("default", "dark", "forest", "neutral")
   theme = "default"
+
+[params.mermaid]
+  # 自托管 mermaid ESM，避免依赖 jsdelivr CDN
+  cdn = "/lib/mermaid/mermaid.esm.min.mjs"
+  themes = ["default", "dark"]

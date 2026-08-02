@@ -11,3 +11,6 @@ resources/
 # Vercel
 .vercel
 .env*.local
+
+# HN digest 运行日志
+.github/hn-digest.log

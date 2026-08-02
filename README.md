@@ -4,7 +4,7 @@
 
 ## 技术栈
 
-- **Hugo** v0.147.7 Extended - 快速的静态网站生成器
+- **Hugo** v0.156.0 Extended - 快速的静态网站生成器
 - **FixIt 主题** - 功能丰富的 Hugo 主题
 - **Vercel** - 全球 CDN 部署平台
 
@@ -22,11 +22,10 @@
 
 ```
 ├── content/posts/      # Markdown 博客文章
-├── themes/FixIt/       # FixIt 主题 (git submodule)
+├── themes/FixIt/       # FixIt 主题（已 vendor 进仓库，非 submodule）
 ├── hugo.toml          # Hugo 配置文件
 ├── static/            # 静态资源
-├── layouts/           # 自定义布局模板
-├── data/              # 数据文件
+├── .github/           # GitHub Actions 定时任务（HN 日报）
 └── public/            # 构建输出 (git ignored)
 ```
 
@@ -34,27 +33,22 @@
 
 ### 前置要求
 
-- Hugo Extended v0.147.7 或更高版本
+- Hugo Extended v0.156.0 或更高版本
 
 ### 本地开发
 
-1. 克隆仓库（包含 submodules）：
+1. 克隆仓库：
 ```bash
-git clone --recurse-submodules https://github.com/cloudzun/clean-vercel-blog.git
+git clone https://github.com/cloudzun/clean-vercel-blog.git
 cd clean-vercel-blog
 ```
 
-2. 如果已经克隆，初始化 submodule：
-```bash
-git submodule update --init --recursive
-```
-
-3. 启动 Hugo 开发服务器：
+2. 启动 Hugo 开发服务器：
 ```bash
 hugo server -D
 ```
 
-4. 在浏览器中打开 [http://localhost:1313](http://localhost:1313) 查看效果。
+3. 在浏览器中打开 [http://localhost:1313](http://localhost:1313) 查看效果。
 
 ## 创建新文章
 
@@ -77,6 +71,8 @@ hugo --gc --minify
 1. 推送到 `master` 分支自动触发部署
 2. Vercel 自动执行 `hugo --gc --minify` 构建
 3. 部署 `public/` 目录的静态文件
+
+另外，仓库中的 [HN Daily Digest 定时任务](.github/workflows/hn-daily-digest.yml) 每天 06:14（北京时间）自动抓取 Hacker News 热门文章，调用 DeepSeek API 生成摘要并提交日报。
 
 ## 配置
 
