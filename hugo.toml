@@ -73,6 +73,9 @@ enableGitInfo = true
   
   # Public git repo url only then enableGitInfo is true
   gitRepo = "https://github.com/cloudzun/clean-vercel-blog"
+
+  # 资源 SRI 哈希（启用后 JS/CSS 文件名带 hash，可安全设置 immutable 缓存）
+  fingerprint = "sha256"
   
   # Header config
   [params.header]

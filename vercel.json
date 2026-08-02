@@ -12,7 +12,7 @@
   "installCommand": "echo skipping submodule",
   "headers": [
     {
-      "source": "/assets/(.*)",
+      "source": "/(js|css)/(.*)",
       "headers": [
         {
           "key": "Cache-Control",
