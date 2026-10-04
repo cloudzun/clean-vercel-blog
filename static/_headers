@@ -1,0 +1,16 @@
+# Cloudflare Pages headers, ported from vercel.json.
+# Built by Hugo from static/_headers into the output root, where Pages reads it.
+#
+# Hashed asset filenames (style.min.<sha>.css, theme.min.<sha>.js…) never change
+# contents, so they are cached immutably; see vercel.json's /(js|css)/(.*) rule.
+
+/js/*
+  Cache-Control: public, max-age=31536000, immutable
+
+/css/*
+  Cache-Control: public, max-age=31536000, immutable
+
+/*
+  X-Content-Type-Options: nosniff
+  X-Frame-Options: SAMEORIGIN
+  Referrer-Policy: strict-origin-when-cross-origin
