@@ -14,6 +14,11 @@ on:
   workflow_run:
     workflows: ["HN Daily Digest"]
     types: [completed]
+  schedule:
+    # Safety net for silent drift: if the digest workflow is ever renamed, the
+    # workflow_run trigger above stops matching and the site would quietly stop
+    # updating. This redeploys master once a day regardless.
+    - cron: '0 2 * * *'  # 02:00 UTC — after the digest's 22:14 UTC run
   workflow_dispatch:
 
 concurrency:
@@ -22,6 +27,9 @@ concurrency:
 
 jobs:
   deploy:
+    # A digest run that failed published nothing (its push is the last step),
+    # so there is nothing new to deploy.
+    if: github.event_name != 'workflow_run' || github.event.workflow_run.conclusion == 'success'
     runs-on: ubuntu-latest
     permissions:
       contents: read
