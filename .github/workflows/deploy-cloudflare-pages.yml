@@ -6,6 +6,14 @@ name: Deploy to Cloudflare Pages
 on:
   push:
     branches: [master]
+  # The HN Daily Digest commits with its own GITHUB_TOKEN, and GitHub does not
+  # trigger `on: push` workflows for pushes made with GITHUB_TOKEN (an
+  # anti-recursion rule). Vercel still updated because its Git integration
+  # listens on a webhook, not on Actions. So the digest's completion is the
+  # event that publishes its post here.
+  workflow_run:
+    workflows: ["HN Daily Digest"]
+    types: [completed]
   workflow_dispatch:
 
 concurrency:
@@ -24,6 +32,9 @@ jobs:
         with:
           # The FixIt theme is vendored under themes/, so no submodules.
           submodules: false
+          # On workflow_run, build the commit the digest just pushed; on push,
+          # the pushed commit itself.
+          ref: ${{ github.event.workflow_run.head_sha || github.sha }}
 
       - name: Install Hugo (extended)
         env:
